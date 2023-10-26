@@ -40,14 +40,16 @@ export class PublicationService {
     return `This action updates a #${id} publication`;
   }
 
-  async generate(id: number) {
+  async generate(id: number, file: Express.Multer.File) {
     const publication = await this.publicationRepository.findOne({
       where: {
         id,
       },
     });
 
-    const paths = await convert(publication);
+    const paths = await convert(publication, file);
+
+    await this.pageRepository.delete(publication.pages.map((p) => p.id));
 
     for (const path of paths) {
       const pageData = new Page();

@@ -37,10 +37,13 @@ NodeCanvasFactory.prototype = {
 
 const canvasFactory = new NodeCanvasFactory();
 
-export const convert = async (publication: Publication): Promise<string[]> => {
+export const convert = async (
+  publication: Publication,
+  file: Express.Multer.File
+): Promise<string[]> => {
   try {
     let paths = [];
-    const loadingTask = getDocument("./storage/test.pdf");
+    const loadingTask = getDocument(new Uint8Array(file.buffer));
 
     const pdfDocument = await loadingTask.promise;
 

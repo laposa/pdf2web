@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from "@nestjs/common";
 import { PublicationService } from "./publication.service";
 import { CreatePublicationDto } from "./dto/create-publication.dto";
 import { UpdatePublicationDto } from "src/publication/dto/update-publication.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller("publication")
 export class PublicationController {
@@ -31,8 +34,9 @@ export class PublicationController {
   }
 
   @Post(":id/generate")
-  generate(@Param("id") id: string) {
-    return this.publicationService.generate(+id);
+  @UseInterceptors(FileInterceptor("file"))
+  generate(@Param("id") id: string, @UploadedFile() file: Express.Multer.File) {
+    return this.publicationService.generate(+id, file);
   }
 
   @Patch(":id")

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Page } from "src/publication/entities/page.entity";
@@ -6,6 +6,7 @@ import { convert } from "src/publication/lib/pdf-to-images";
 import { Publication } from "src/publication/entities/publication.entity";
 import { CreatePublicationDto } from "src/publication/dto/create-publication.dto";
 import { UpdatePublicationDto } from "src/publication/dto/update-publication.dto";
+import { UpdatePageDto } from "src/publication/dto/update-page.dto";
 
 @Injectable()
 export class PublicationService {
@@ -49,7 +50,9 @@ export class PublicationService {
 
     const paths = await convert(publication, file);
 
-    await this.pageRepository.delete(publication.pages.map((p) => p.id));
+    if (publication.pages.length > 0) {
+      await this.pageRepository.delete(publication.pages.map((p) => p.id));
+    }
 
     for (const path of paths) {
       const pageData = new Page();
@@ -63,6 +66,25 @@ export class PublicationService {
     await this.publicationRepository.save(publication);
 
     return { publication };
+  }
+
+  async updatePage(id: number, pageId: number, updatePageDto: UpdatePageDto) {
+    const publication = await this.publicationRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    const page = publication.pages.find((p) => p.id === pageId);
+
+    if (!page) throw new HttpException("Page not found", HttpStatus.NOT_FOUND);
+
+    page.name = updatePageDto.name;
+    page.areas_json = updatePageDto.areas_json;
+
+    await this.pageRepository.save(page);
+
+    return { page };
   }
 
   remove(id: number) {

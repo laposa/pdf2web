@@ -1,5 +1,11 @@
 import { Publication } from "src/publication/entities/publication.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity("page")
 export class Page {
@@ -11,6 +17,12 @@ export class Page {
 
   @Column()
   filename: string;
+
+  @Column({
+    type: "json",
+    nullable: true,
+  })
+  areas_json: any;
 
   @ManyToOne(() => Publication, (publication) => publication.pages)
   publication: Publication;

@@ -9,6 +9,7 @@ import {
 import { getDocument } from "pdfjs-dist";
 import { createCanvas } from "canvas";
 import { Publication } from "src/publication/entities/publication.entity";
+import * as path from "path";
 
 function NodeCanvasFactory() {}
 
@@ -63,23 +64,16 @@ export const convert = async (
       await renderTask.promise;
       const image = canvasAndContext.canvas.toBuffer();
 
-      const folder = `./storage/${publication.id}`;
+      const folder = `/uploads/${publication.id}`;
       const filename = `output-${i}.png`;
-      const path = `${folder}/${filename}`;
 
-      mkdirSync(folder, { recursive: true });
+      const savePath = `${folder}/${filename}`;
 
-      writeFile(`${path}`, image, function (error) {
-        if (error) {
-          console.error("Error: " + error);
-        } else {
-          console.log(
-            "Finished converting first page of PDF file to a PNG image."
-          );
-        }
-      });
+      mkdirSync(`./public${folder}`, { recursive: true });
 
-      paths.push(path);
+      writeFileSync(`./public${folder}/${filename}`, image);
+
+      paths.push(savePath);
       // Release page resources.
       page.cleanup();
     }

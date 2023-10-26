@@ -30,11 +30,16 @@ export class PublicationService {
   }
 
   async findOne(id: number) {
-    return await this.publicationRepository.findOne({
-      where: {
-        id,
-      },
-    });
+    // TODO: is there a simpler way to order relationships?
+    // order the pages by id
+    const publication = await this.publicationRepository
+      .createQueryBuilder("publication")
+      .leftJoinAndSelect("publication.pages", "pages")
+      .orderBy("pages.id")
+      .where("publication.id = :id", { id })
+      .getOne();
+
+    return publication;
   }
 
   update(id: number, updatePublicationDto: UpdatePublicationDto) {

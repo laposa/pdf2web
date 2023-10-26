@@ -27,7 +27,10 @@ export class Publication {
   })
   author: string;
 
-  @OneToMany((type) => Page, (page) => page.publication, { eager: true })
+  @OneToMany((type) => Page, (page) => page.publication, {
+    eager: true,
+    onDelete: "CASCADE",
+  })
   pages: Page[];
 
   @CreateDateColumn()

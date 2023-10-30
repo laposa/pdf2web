@@ -27,14 +27,19 @@ export const FabricCanvas = (props: FabricCanvasProps) => {
     }
 
     if (initialData) {
-      initialData.map((area) => {
+      initialData.map((area, index) => {
         const rect = new fabric.Rect({
+          id: `object-${index}`,
           left: canvas.getWidth() * (area.left / 100),
           top: canvas.getHeight() * (area.top / 100),
           width: canvas.getWidth() * (area.width / 100),
           height: canvas.getHeight() * (area.height / 100),
           backgroundColor: "rgba(33,33,33)",
           opacity: 0.2,
+          strokeWidth: 1,
+          stroke: "white",
+          tooltip: area.tooltip,
+          url: area.url,
         });
 
         canvas.add(rect);

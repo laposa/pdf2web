@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <link
+      rel="stylesheet"
+      href="http://localhost:3000/scripts/app/dist/assets/index-a6294271.css"
+    />
+    <script>
+      window.addEventListener("pdf2webPublic.loaded", function () {
+        window.pdf2webPublic({
+          manifest_url: "http://localhost:3000/manifests/25.json",
+        });
+      });
+    </script>
+    <script src="http://localhost:3000/scripts/app/dist/assets/index-b32a55ae.js"></script>
+  </body>
+</html>

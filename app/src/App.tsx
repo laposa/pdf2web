@@ -8,7 +8,7 @@ type AppProps = {
     manifest_url: string;
   };
 };
-function App(props) {
+function App(props: AppProps) {
   const [data, setData] = useState<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 

@@ -1,8 +1,5 @@
 import axios from "axios";
 
-import { createAxiosClient } from "./createAxiosClient";
-import { useAuthStore } from "../src/stores/authStore";
-
 const createClient = () => {
   const client = axios.create({
     baseURL: "http://localhost:3000",

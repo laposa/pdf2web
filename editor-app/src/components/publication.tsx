@@ -34,6 +34,7 @@ export const Publication = (props: PublicationProps) => {
             src={activePage.url}
             data={activePage.areas_json}
             onUpdate={handleUpdatePage}
+            isSaving={updatePageMutation.status === "pending"}
           />
         ) : (
           <EmptyState text="No page found" />

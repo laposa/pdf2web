@@ -1,7 +1,7 @@
 import { publicationKeys } from "@/api/use-publicaction";
 import { Area } from "@/components/editor/editor";
 import { client } from "@/lib/axios-client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type UpdatePagePayload = {
   name: string;

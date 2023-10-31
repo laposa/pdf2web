@@ -1,5 +1,5 @@
 import { FabricContext } from "@/components/fabric/fabric-context";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 export const useFabric = () => {
   const context = useContext(FabricContext);

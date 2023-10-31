@@ -1,15 +1,20 @@
-import { usePublications } from "@/api/use-publicaction";
-import { Publication } from "@/components/publication";
 import { PublicationsList } from "@/components/publications-list";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
 
 const queryClient = new QueryClient();
 
-function App() {
+type AppProps = {
+  configuration: {
+    api_url: string;
+    api_token: string;
+    publication_id?: number;
+  };
+};
+
+function App(props: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <PublicationsList />
+      <PublicationsList publicationId={props.configuration.publication_id} />
     </QueryClientProvider>
   );
 }

@@ -1,6 +1,6 @@
 import { Area } from "@/components/editor/editor";
 import { FabricContext } from "@/components/fabric/fabric-context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface FabricProviderProps {
   children: React.ReactNode;
@@ -11,7 +11,8 @@ export const FabricProvider = (props: FabricProviderProps) => {
   const [canvas, setCanvas] = useState<any>(null);
 
   const handleSave = () => {
-    const objects = canvas.getObjects().map((o) => ({
+    // TODO: Fabric.js typescript
+    const objects = canvas.getObjects().map((o: any) => ({
       left: +((o.left / canvas.getWidth()) * 100).toFixed(2),
       top: +((o.top / canvas.getHeight()) * 100).toFixed(2),
       width: +((o.getScaledWidth() / canvas.getWidth()) * 100).toFixed(2),
@@ -22,6 +23,12 @@ export const FabricProvider = (props: FabricProviderProps) => {
 
     props.onUpdate(objects);
   };
+
+  useEffect(() => {
+    if (canvas) {
+      canvas.on("after:render", () => console.log("HERE!!!!!"));
+    }
+  }, [canvas]);
 
   const value = {
     canvas,

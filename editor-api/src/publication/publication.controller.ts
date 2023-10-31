@@ -21,8 +21,13 @@ export class PublicationController {
   constructor(private readonly publicationService: PublicationService) {}
 
   @Post()
-  create(@Body() CreatePublicationDto: CreatePublicationDto) {
-    return this.publicationService.create(CreatePublicationDto);
+  @UseInterceptors(FileInterceptor("file"))
+  create(
+    @Body() CreatePublicationDto: CreatePublicationDto,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    // TODO: add file validation
+    return this.publicationService.create(CreatePublicationDto, file);
   }
 
   @Get()
@@ -33,12 +38,6 @@ export class PublicationController {
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.publicationService.findOne(+id);
-  }
-
-  @Post(":id/generate")
-  @UseInterceptors(FileInterceptor("file"))
-  generate(@Param("id") id: string, @UploadedFile() file: Express.Multer.File) {
-    return this.publicationService.generate(+id, file);
   }
 
   @Patch(":id")

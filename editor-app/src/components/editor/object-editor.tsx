@@ -8,7 +8,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
@@ -16,39 +15,39 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IObservable } from "fabric/fabric-impl";
+import { IObservable, Object } from "fabric/fabric-impl";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const formSchema = z.object({
-  url: z.string().url(),
-  tooltip: z.string(),
+  url: z.string().url().optional(),
+  tooltip: z.string().optional(),
 });
 
 export const ObjectEditor = () => {
   const { canvas } = useFabric();
   const [selectedObject, setSelectedObject] =
-    useState<IObservable<void> | null>();
+    useState<IObservable<Object> | null>();
 
   const [position, setPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
-  const [data, setData] = useState({
-    url: "",
-    tooltip: "",
-  });
 
-  const handleObjectSelected = (event) => {
-    setSelectedObject(event.selected[0]);
-    setPosition({
-      x: event.selected[0].left,
-      y: event.selected[0].top + 50,
-      width: event.selected[0].width * event.selected[0].scaleX,
-      height: event.selected[0].height * event.selected[0].scaleY,
-    });
-    setData({
-      url: event.selected[0].url,
-      tooltip: event.selected[0].tooltip,
-    });
+  const getPosition = (object: Object) => {
+    return {
+      x: object.left ?? 0,
+      y: object.top ? object.top + 50 : 0,
+      width: object.width && object.scaleX ? object.width * object.scaleX : 0,
+      height:
+        object.height && object.scaleY ? object.height * object.scaleY : 0,
+    };
+  };
+
+  const handleObjectSelected = (event: fabric.IEvent<Event>) => {
+    const object = event.selected?.[0];
+    if (object !== undefined) {
+      setSelectedObject(object);
+      setPosition(getPosition(object));
+    }
   };
 
   useEffect(() => {
@@ -59,25 +58,20 @@ export const ObjectEditor = () => {
         setSelectedObject(null);
       });
 
-      canvas.on("object:moving", (event) => {
-        setPosition({
-          x: event.target.left,
-          y: event.target.top + 50,
-          width: event.target.width * event.target.scaleX,
-          height: event.target.height * event.target.scaleY,
-        });
+      canvas.on("object:moving", (event: fabric.IEvent<Event>) => {
+        const object = event.target;
+        if (object) {
+          setPosition(getPosition(object));
+        }
+      });
+      canvas.on("object:scaling", (event: fabric.IEvent<Event>) => {
+        const object = event.target;
+        if (object) {
+          setPosition(getPosition(object));
+        }
       });
     }
   }, [canvas]);
-
-  useEffect(() => {
-    if (selectedObject) {
-      selectedObject.tooltip = data.tooltip;
-      selectedObject.url = data.url;
-    }
-  }, [data]);
-
-  console.log(selectedObject);
 
   if (!selectedObject) return null;
 
@@ -85,7 +79,7 @@ export const ObjectEditor = () => {
     <>
       <Popover open={true}>
         <PopoverTrigger asChild>
-          <div
+          <button
             className="absolute pointer-events-none"
             style={{
               left: position.x,
@@ -93,13 +87,14 @@ export const ObjectEditor = () => {
               width: position.width,
               height: position.height,
             }}
-          ></div>
+          ></button>
         </PopoverTrigger>
         <PopoverContent sideOffset={20} side="left" align="center">
           <ObjectForm
+            // @ts-ignore
             key={selectedObject.id}
-            values={data}
-            onUpdate={(values) => setData(values)}
+            object={selectedObject}
+            onUpdate={() => {}}
           />
         </PopoverContent>
       </Popover>
@@ -108,14 +103,17 @@ export const ObjectEditor = () => {
 };
 
 const ObjectForm = (props: {
-  values: z.infer<typeof formSchema>;
   onUpdate: (values: z.infer<typeof formSchema>) => void;
+  object: IObservable<Object>;
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
-      ...props.values,
+      // @ts-ignore
+      url: props.object.url,
+      // @ts-ignore
+      tooltip: props.object.tooltip,
     },
   });
 
@@ -126,44 +124,47 @@ const ObjectForm = (props: {
   const watch = form.watch();
 
   useEffect(() => {
-    //   onSubmit(form.getValues());
-    if (form.formState.isValid && !form.formState.isValidating) {
-      onSubmit(form.getValues());
-    }
-  }, [watch, form.formState]);
+    // @ts-ignore
+    props.object.tooltip = watch.tooltip;
+    // @ts-ignore
+    props.object.url = watch.url;
+    props.onUpdate(watch);
+  }, [watch]);
 
   return (
     <Form {...form}>
-      <FormField
-        control={form.control}
-        name="url"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Link</FormLabel>
-            <FormControl>
-              <Input type="url" className="h-8" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="tooltip"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Tooltip</FormLabel>
-            <FormControl>
-              <Textarea
-                className="h-8"
-                placeholder="Enter tooltip text"
-                {...field}
-              ></Textarea>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+        <FormField
+          control={form.control}
+          name="url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Link</FormLabel>
+              <FormControl>
+                <Input type="url" className="h-8" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="tooltip"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tooltip</FormLabel>
+              <FormControl>
+                <Textarea
+                  className="h-8"
+                  placeholder="Enter tooltip text"
+                  {...field}
+                ></Textarea>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
     </Form>
   );
 };

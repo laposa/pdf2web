@@ -5,22 +5,19 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { PublicationModule } from "src/publication/publication.module";
 import { join } from "path";
 import { ServeStaticModule } from "@nestjs/serve-static";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { DatabaseConfiguration } from "src/database.configuration";
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     PublicationModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "public"),
     }),
-    TypeOrmModule.forRoot({
-      type: "postgres",
-      host: "localhost",
-      port: 5432,
-      username: "postgres",
-      password: "password",
-      database: "flipbook",
-      synchronize: true,
-      autoLoadEntities: true,
+
+    TypeOrmModule.forRootAsync({
+      useClass: DatabaseConfiguration,
     }),
   ],
   //   controllers: [AppController],

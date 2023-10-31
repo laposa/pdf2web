@@ -4,7 +4,7 @@ import { useFabric } from "@/components/fabric/use-fabric";
 import { useEffect, useRef, useState } from "react";
 import { fabric } from "fabric";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 import { ObjectEditor } from "@/components/editor/object-editor";
 
 export type Area = {
@@ -19,7 +19,8 @@ export type Area = {
 type EditorProps = {
   src: string;
   data: Area[];
-  onUpdate?: (objects: Area[]) => void;
+  onUpdate: (objects: Area[]) => void;
+  isSaving: boolean;
 };
 
 export const Editor = (props: EditorProps) => {
@@ -30,7 +31,7 @@ export const Editor = (props: EditorProps) => {
   return (
     <FabricProvider onUpdate={onUpdate}>
       <div className="relative">
-        <EditorController onUpdate={onUpdate} />
+        <EditorController isSaving={props.isSaving} />
         <div className="relative" ref={ref}>
           <img
             className="w-full h-auto"
@@ -54,23 +55,20 @@ export const Editor = (props: EditorProps) => {
   );
 };
 
-export const EditorController = (props: {
-  onUpdate: (objects: Area[]) => void;
-}) => {
+export const EditorController = (props: Pick<EditorProps, "isSaving">) => {
   const { canvas, handleSave } = useFabric();
-  const { onUpdate } = props;
 
   useEffect(() => {
     if (canvas) {
-      canvas.on("mouse:over", function (e) {
+      canvas.on("mouse:over", function (e: fabric.IEvent<Event>) {
         if (!e.target) return;
-        e.target.set("opacity", "0.4");
+        e.target.set("opacity", 0.4);
         canvas.renderAll();
       });
 
-      canvas.on("mouse:out", function (e) {
+      canvas.on("mouse:out", function (e: fabric.IEvent<Event>) {
         if (!e.target) return;
-        e.target.set("opacity", "0.2");
+        e.target.set("opacity", 0.2);
         canvas.renderAll();
       });
     }
@@ -99,7 +97,14 @@ export const EditorController = (props: {
         Add Hotspot
       </Button>
 
-      <Button type="button" onClick={handleSave}>
+      <Button
+        type="button"
+        onClick={() => handleSave()}
+        disabled={props.isSaving}
+      >
+        {props.isSaving ? (
+          <Loader className="w-4 h-4 mr-2 animate-spin" />
+        ) : null}
         Save
       </Button>
     </div>

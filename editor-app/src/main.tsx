@@ -5,7 +5,7 @@ import "./index.css";
 
 declare global {
   interface Window {
-    pdf2web: () => void;
+    pdf2web: (options: any) => void;
   }
 }
 
@@ -13,7 +13,7 @@ window.pdf2web = (options) => {
   console.log("Rendering pdf2web editor", options);
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
-      <App />
+      <App configuration={options} />
     </React.StrictMode>
   );
 };

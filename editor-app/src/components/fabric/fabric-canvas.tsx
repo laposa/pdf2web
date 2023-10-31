@@ -29,6 +29,7 @@ export const FabricCanvas = (props: FabricCanvasProps) => {
     if (initialData) {
       initialData.map((area, index) => {
         const rect = new fabric.Rect({
+          // @ts-ignore
           id: `object-${index}`,
           left: canvas.getWidth() * (area.left / 100),
           top: canvas.getHeight() * (area.top / 100),

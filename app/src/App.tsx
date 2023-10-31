@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+// @ts-ignore
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 
 function App() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {

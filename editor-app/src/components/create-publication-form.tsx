@@ -35,7 +35,6 @@ export const CreatePublicationForm = (props: {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
     createPublicationMutation.mutate(values, {
       onSuccess: () => {
         props.onRequestClose();

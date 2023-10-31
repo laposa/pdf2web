@@ -117,7 +117,5 @@ export class PublicationService {
       `./public/manifests/${publication.id}.json`,
       JSON.stringify(publication)
     );
-
-    console.log(publication);
   }
 }

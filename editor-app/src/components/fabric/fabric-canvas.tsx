@@ -17,7 +17,7 @@ export const FabricCanvas = (props: FabricCanvasProps) => {
 
   useEffect(() => {
     const canvas = new fabric.Canvas(canvasRef.current, props.options ?? {});
-    setCanvas(canvas);
+
     if (props.width) {
       canvas.setWidth(props.width);
     }
@@ -48,6 +48,8 @@ export const FabricCanvas = (props: FabricCanvasProps) => {
     }
 
     canvas.renderAll();
+
+    setCanvas(canvas);
 
     return () => {
       setCanvas(null);

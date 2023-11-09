@@ -63,6 +63,7 @@ const Pagination = (props: PaginationProps) => {
   return (
     <div className="flex py-2 select-none items-center">
       <Button
+        size="sm"
         variant="outline"
         onClick={() => updatePage(activePage - 1)}
         disabled={activePage === 0}
@@ -74,6 +75,7 @@ const Pagination = (props: PaginationProps) => {
       </div>
 
       <Button
+        size="sm"
         variant="outline"
         onClick={() => updatePage(activePage + 1)}
         disabled={activePage === numPages - 1}

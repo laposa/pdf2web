@@ -92,12 +92,13 @@ export const EditorController = (props: Pick<EditorProps, "isSaving">) => {
 
   return (
     <div className="flex gap-2 mb-2">
-      <Button type="button" onClick={handleAddHotspot}>
+      <Button size="sm" type="button" onClick={handleAddHotspot}>
         <Plus className="w-4 h-4 mr-2" />
         Add Hotspot
       </Button>
 
       <Button
+        size="sm"
         type="button"
         onClick={() => handleSave()}
         disabled={props.isSaving}

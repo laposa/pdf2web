@@ -103,11 +103,14 @@ export const EditorController = (props: Pick<EditorProps, "isSaving">) => {
         onClick={() => handleSave()}
         disabled={props.isSaving}
       >
-        {props.isSaving ? (
-          <Loader className="w-4 h-4 mr-2 animate-spin" />
-        ) : null}
         Save
       </Button>
+
+      <div className="ml-auto flex items-center">
+        {props.isSaving ? (
+          <Loader className="w-4 h-4 mr-2 text-gray-900 animate-spin" />
+        ) : null}
+      </div>
     </div>
   );
 };

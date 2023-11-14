@@ -4,6 +4,7 @@ import { Area, Editor } from "@/components/editor/editor";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Loader } from "@/components/ui/loader";
+import { formatDate } from "@/lib/data";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState } from "react";
 
@@ -28,7 +29,9 @@ export const Publication = (props: PublicationProps) => {
   if (query.data) {
     return (
       <div key={activePageIndex}>
-        <h2 className="text-lg font-medium">Publication: {query.data.title}</h2>
+        <h2 className="text-lg font-medium text-center border-b mb-2 pb-2">
+          Publication: {query.data.title}
+        </h2>
         {activePage ? (
           <Editor
             src={activePage.url}
@@ -44,6 +47,9 @@ export const Publication = (props: PublicationProps) => {
           updatePage={(index) => setActivePageIndex(index)}
           numPages={query.data.pages.length}
         />
+        <div className="text-center text-sm">
+          Last saved at: {formatDate(query.data.updated_at)}
+        </div>
       </div>
     );
   }

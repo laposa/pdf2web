@@ -94,6 +94,9 @@ export class PublicationService {
 
     await this.pageRepository.save(page);
 
+    publication.updated_at = new Date();
+    await this.publicationRepository.save(publication);
+
     await this.generateManifest(id);
 
     return { page };

@@ -16,7 +16,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IObservable, Object } from "fabric/fabric-impl";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -26,52 +26,7 @@ const formSchema = z.object({
 });
 
 export const ObjectEditor = () => {
-  const { canvas } = useFabric();
-  const [selectedObject, setSelectedObject] =
-    useState<IObservable<Object> | null>();
-
-  const [position, setPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
-
-  const getPosition = (object: Object) => {
-    return {
-      x: object.left ?? 0,
-      y: object.top ? object.top + 50 : 0,
-      width: object.width && object.scaleX ? object.width * object.scaleX : 0,
-      height:
-        object.height && object.scaleY ? object.height * object.scaleY : 0,
-    };
-  };
-
-  const handleObjectSelected = (event: fabric.IEvent<Event>) => {
-    const object = event.selected?.[0];
-    if (object !== undefined) {
-      setSelectedObject(object);
-      setPosition(getPosition(object));
-    }
-  };
-
-  useEffect(() => {
-    if (canvas) {
-      canvas.on("selection:created", handleObjectSelected);
-      canvas.on("selection:updated", handleObjectSelected);
-      canvas.on("selection:cleared", () => {
-        setSelectedObject(null);
-      });
-
-      canvas.on("object:moving", (event: fabric.IEvent<Event>) => {
-        const object = event.target;
-        if (object) {
-          setPosition(getPosition(object));
-        }
-      });
-      canvas.on("object:scaling", (event: fabric.IEvent<Event>) => {
-        const object = event.target;
-        if (object) {
-          setPosition(getPosition(object));
-        }
-      });
-    }
-  }, [canvas]);
+  const { selectedObject, position, handleSave } = useFabric();
 
   if (!selectedObject) return null;
 
@@ -91,10 +46,11 @@ export const ObjectEditor = () => {
         </PopoverTrigger>
         <PopoverContent sideOffset={20} side="left" align="center">
           <ObjectForm
-            // @ts-ignore
             key={selectedObject.id}
             object={selectedObject}
-            onUpdate={() => {}}
+            onUpdate={() => {
+              handleSave();
+            }}
           />
         </PopoverContent>
       </Popover>
@@ -121,15 +77,15 @@ const ObjectForm = (props: {
     props.onUpdate(values);
   };
 
-  const watch = form.watch();
+  //   const watch = form.watch();
 
-  useEffect(() => {
-    // @ts-ignore
-    props.object.tooltip = watch.tooltip;
-    // @ts-ignore
-    props.object.url = watch.url;
-    props.onUpdate(watch);
-  }, [watch]);
+  //   useEffect(() => {
+  //     // @ts-ignore
+  //     props.object.tooltip = watch.tooltip;
+  //     // @ts-ignore
+  //     props.object.url = watch.url;
+  //     // props.onUpdate(watch);
+  //   }, [watch]);
 
   return (
     <Form {...form}>
@@ -141,7 +97,17 @@ const ObjectForm = (props: {
             <FormItem>
               <FormLabel>Link</FormLabel>
               <FormControl>
-                <Input type="url" className="h-8" {...field} />
+                <Input
+                  type="url"
+                  className="h-8"
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    // @ts-ignore
+                    props.object.url = e.target.value;
+                    props.onUpdate(form.getValues());
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -158,6 +124,12 @@ const ObjectForm = (props: {
                   className="h-8"
                   placeholder="Enter tooltip text"
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    // @ts-ignore
+                    props.object.tooltip = e.target.value;
+                    props.onUpdate(form.getValues());
+                  }}
                 ></Textarea>
               </FormControl>
               <FormMessage />

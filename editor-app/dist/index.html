@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+    <style>
+      .app-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      #root {
+        max-width: 560px;
+        width: 100%;
+        padding: 1rem;
+        border: 1px solid #eee;
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-f356804c.js"></script>
+    <link rel="stylesheet" href="/assets/index-3f6406fa.css">
+  </head>
+  <body>
+    <div class="app-container">
+      <div id="root"></div>
+    </div>
+    
+    <script>
+      window.addEventListener("pdf2web.loaded", function () {
+        window.pdf2web({
+          api_url: "http://localhost:3000",
+          api_token: "",
+          publication_id: null,
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -28,7 +28,7 @@
     "@nestjs/serve-static": "^4.0.0",
     "@nestjs/typeorm": "^10.0.0",
     "canvas": "^2.11.2",
-    "mysql2": "^3.6.2",
+    "mysql2": "^3.9.4",
     "node-canvas": "^2.9.0",
     "pdfjs-dist": "^3.11.174",
     "pg": "^8.11.3",

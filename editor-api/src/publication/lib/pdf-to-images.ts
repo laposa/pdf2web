@@ -1,49 +1,14 @@
-import {
-  mkdir,
-  mkdirSync,
-  readFile,
-  readFileSync,
-  writeFile,
-  writeFileSync,
-} from "fs";
-import { getDocument } from "pdfjs-dist";
-import { createCanvas } from "canvas";
-import { Publication } from "src/publication/entities/publication.entity";
-import * as path from "path";
-
-function NodeCanvasFactory() {}
-
-NodeCanvasFactory.prototype = {
-  create: function NodeCanvasFactory_create(width, height) {
-    const canvas = createCanvas(width, height);
-    const context = canvas.getContext("2d");
-    return {
-      canvas,
-      context,
-    };
-  },
-
-  reset: function NodeCanvasFactory_reset(canvasAndContext, width, height) {
-    canvasAndContext.canvas.width = width;
-    canvasAndContext.canvas.height = height;
-  },
-
-  destroy: function NodeCanvasFactory_destroy(canvasAndContext) {
-    canvasAndContext.canvas.width = 0;
-    canvasAndContext.canvas.height = 0;
-    canvasAndContext.canvas = null;
-    canvasAndContext.context = null;
-  },
-};
-
-const canvasFactory = new NodeCanvasFactory();
+import { mkdirSync, writeFileSync } from 'fs';
+import { getDocument } from 'pdfjs-dist';
+import { createCanvas } from 'canvas';
+import { Publication } from 'src/publication/entities/publication.entity';
 
 export const convert = async (
   publication: Publication,
-  file: Express.Multer.File
+  file: Express.Multer.File,
 ): Promise<string[]> => {
   try {
-    let paths = [];
+    const paths = [];
     const loadingTask = getDocument(new Uint8Array(file.buffer));
 
     const pdfDocument = await loadingTask.promise;
@@ -51,18 +16,16 @@ export const convert = async (
     for (let i = 1; i <= pdfDocument.numPages; i++) {
       const page = await pdfDocument.getPage(i);
       const viewport = page.getViewport({ scale: 2.0 });
-      const canvasAndContext = canvasFactory.create(
-        viewport.width,
-        viewport.height
-      );
-      const renderContext = {
-        canvasContext: canvasAndContext.context,
-        viewport,
-      };
+      const canvas = createCanvas(viewport.width, viewport.height);
+      const context = canvas.getContext('2d');
 
-      const renderTask = page.render(renderContext);
+      const renderTask = page.render({
+        canvasContext: context as any,
+        viewport: viewport,
+      });
+
       await renderTask.promise;
-      const image = canvasAndContext.canvas.toBuffer();
+      const image = canvas.toBuffer();
 
       const folder = `/uploads/${publication.id}`;
       const filename = `output-${i}.png`;

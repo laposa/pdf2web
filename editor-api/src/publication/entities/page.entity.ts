@@ -1,16 +1,13 @@
-import { Publication } from "src/publication/entities/publication.entity";
+import { Publication } from 'src/publication/entities/publication.entity';
 import {
-  AfterInsert,
   AfterLoad,
-  AfterUpdate,
   Column,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
-} from "typeorm";
+} from 'typeorm';
 
-@Entity("page")
+@Entity('page')
 export class Page {
   @PrimaryGeneratedColumn()
   id: number;
@@ -25,7 +22,7 @@ export class Page {
   url: string;
 
   @Column({
-    type: "json",
+    type: 'json',
     nullable: true,
   })
   areas_json: any;
@@ -35,7 +32,7 @@ export class Page {
 
   @AfterLoad()
   generateUrl(): void {
-    this.url = `${process.env.APP_URL ?? "http://localhost:3000"}${
+    this.url = `${process.env.APP_URL ?? 'http://localhost:3000'}${
       this.filename
     }`;
   }

@@ -1,13 +1,13 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Page } from "src/publication/entities/page.entity";
-import { convert } from "src/publication/lib/pdf-to-images";
-import { Publication } from "src/publication/entities/publication.entity";
-import { CreatePublicationDto } from "src/publication/dto/create-publication.dto";
-import { UpdatePublicationDto } from "src/publication/dto/update-publication.dto";
-import { UpdatePageDto } from "src/publication/dto/update-page.dto";
-import { mkdirSync, writeFileSync } from "fs";
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Page } from 'src/publication/entities/page.entity';
+import { convert } from 'src/publication/lib/pdf-to-images';
+import { Publication } from 'src/publication/entities/publication.entity';
+import { CreatePublicationDto } from 'src/publication/dto/create-publication.dto';
+import { UpdatePublicationDto } from 'src/publication/dto/update-publication.dto';
+import { UpdatePageDto } from 'src/publication/dto/update-page.dto';
+import { mkdirSync, writeFileSync } from 'fs';
 
 @Injectable()
 export class PublicationService {
@@ -15,12 +15,12 @@ export class PublicationService {
     @InjectRepository(Publication)
     private readonly publicationRepository: Repository<Publication>,
     @InjectRepository(Page)
-    private readonly pageRepository: Repository<Page>
+    private readonly pageRepository: Repository<Page>,
   ) {}
 
   async create(
     CreatePublicationDto: CreatePublicationDto,
-    file: Express.Multer.File
+    file: Express.Multer.File,
   ) {
     const publication = new Publication();
     publication.title = CreatePublicationDto.title;
@@ -54,10 +54,10 @@ export class PublicationService {
     // TODO: is there a simpler way to order relationships?
     // order the pages by id
     const publication = await this.publicationRepository
-      .createQueryBuilder("publication")
-      .leftJoinAndSelect("publication.pages", "pages")
-      .orderBy("pages.id")
-      .where("publication.id = :id", { id })
+      .createQueryBuilder('publication')
+      .leftJoinAndSelect('publication.pages', 'pages')
+      .orderBy('pages.id')
+      .where('publication.id = :id', { id })
       .getOne();
 
     return publication;
@@ -87,7 +87,7 @@ export class PublicationService {
 
     const page = publication.pages.find((p) => p.id === pageId);
 
-    if (!page) throw new HttpException("Page not found", HttpStatus.NOT_FOUND);
+    if (!page) throw new HttpException('Page not found', HttpStatus.NOT_FOUND);
 
     page.name = updatePageDto.name;
     page.areas_json = updatePageDto.areas_json;
@@ -108,17 +108,17 @@ export class PublicationService {
 
   async generateManifest(id: number) {
     const publication = await this.publicationRepository
-      .createQueryBuilder("publication")
-      .leftJoinAndSelect("publication.pages", "pages")
-      .orderBy("pages.id")
-      .where("publication.id = :id", { id })
+      .createQueryBuilder('publication')
+      .leftJoinAndSelect('publication.pages', 'pages')
+      .orderBy('pages.id')
+      .where('publication.id = :id', { id })
       .getOne();
 
     mkdirSync(`./public/manifests`, { recursive: true });
 
     writeFileSync(
       `./public/manifests/${publication.id}.json`,
-      JSON.stringify(publication)
+      JSON.stringify(publication),
     );
   }
 }

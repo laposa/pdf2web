@@ -1,10 +1,12 @@
 # Pdf2web API
-- accept PDF and convert to images (using https://github.com/unjs/unpdf or PDF.js directly)
+
+- accept PDF and convert to images (using PDF.js)
 - accept submission for newly defined areas for specific PDF
 - provide list of images for specific PDF
 - provide list of zones for specific PDF/images
 
-# API spec
+## API spec
+
 Client id and secret will be saved in .env. We need only only two clients right now: supervalu, centra.
 
 POST /publications
@@ -16,7 +18,7 @@ request:
 response: array of publication (id, name, created, updated)
 
 GET /publications/{publication id}
-request: 
+request:
 reponse: publication object
 
 POST /publication/{publication id}/area
@@ -24,10 +26,11 @@ request: area object without id (page number, x, y, width, height, tooltip, url)
 response: area object including ID
 
 DELETE /publication/{publication id}/area/{area object id}
-request: 
+request:
 reponse: 200 ok
 
-## Publication object
+##  Publication object
+
 ````json
 {
     "id": 1,
@@ -45,6 +48,7 @@ reponse: 200 ok
 ````
 
 ## Database
+
 One table:
 
 pdf_publication (

@@ -34,6 +34,7 @@ export const CreatePublicationForm = (props: {
     createPublicationMutation.mutate(values, {
       onSuccess: (data) => {
         props.onRequestClose(data.publication.id);
+        window.dispatchEvent(new CustomEvent("pdf2web.created", { detail: data.publication }));
       },
     });
   };

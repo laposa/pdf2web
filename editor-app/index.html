@@ -31,8 +31,12 @@
         window.pdf2web({
           api_url: "http://localhost:3000",
           api_key: "test1234",
-          publication_id: 8,
+          publication_id: null,
         });
+      });
+
+      window.addEventListener("pdf2web.created", function (event) {
+        console.log("Created event", event.detail);
       });
     </script>
   </body>

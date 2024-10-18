@@ -32,16 +32,20 @@ export const Publication = (props: PublicationProps) => {
         <h2 className="text-lg font-medium text-center border-b mb-2 pb-2">
           Publication: {query.data.title}
         </h2>
-        {activePage ? (
-          <Editor
-            src={activePage.url}
-            data={activePage.areas_json}
-            onUpdate={handleUpdatePage}
-            isSaving={updatePageMutation.status === "pending"}
-          />
-        ) : (
-          <EmptyState text="No page found" />
-        )}
+
+        <div className="min-h-[600px]">
+          {activePage ? (
+            <Editor
+              src={activePage.url}
+              data={activePage.areas_json}
+              onUpdate={handleUpdatePage}
+              isSaving={updatePageMutation.status === "pending"}
+            />
+          ) : (
+            <EmptyState text="No page found" />
+            )}
+        </div>
+          
         <Pagination
           activePage={activePageIndex}
           updatePage={(index) => setActivePageIndex(index)}

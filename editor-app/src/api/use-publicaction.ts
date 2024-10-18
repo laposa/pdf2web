@@ -2,7 +2,6 @@ import { client } from "@/lib/axios-client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type CreatePublicationPayload = {
-  title: string;
   file: File;
 };
 
@@ -38,7 +37,6 @@ export const useCreatePublication = () => {
     mutationKey: publicationKeys.publications,
     mutationFn: async (payload: CreatePublicationPayload) => {
       const formData = new FormData();
-      formData.append("title", payload.title);
       formData.append("file", payload.file);
 
       const res = await client.post("/publication", formData);

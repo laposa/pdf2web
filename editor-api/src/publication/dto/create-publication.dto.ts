@@ -1,12 +1,7 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreatePublicationDto {
   @IsString()
-  readonly name: string;
-
-  @IsString()
+  @IsOptional()
   readonly title: string;
-
-  @IsString()
-  readonly author: string;
 }

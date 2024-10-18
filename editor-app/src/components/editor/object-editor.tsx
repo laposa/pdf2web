@@ -16,9 +16,9 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IObservable, Object } from "fabric/fabric-impl";
-import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { Trash } from "lucide-react";
 
 const formSchema = z.object({
   url: z.string().url().optional(),
@@ -26,9 +26,13 @@ const formSchema = z.object({
 });
 
 export const ObjectEditor = () => {
-  const { selectedObject, position, handleSave } = useFabric();
+  const { selectedObject, position, handleSave, canvas } = useFabric();
 
   if (!selectedObject) return null;
+
+  const handleRemove = () => {
+    canvas.remove(selectedObject);
+  };
 
   return (
     <>
@@ -52,6 +56,12 @@ export const ObjectEditor = () => {
               handleSave();
             }}
           />
+          <button
+            onClick={handleRemove}
+            className="mt-4 flex items-center justify-center p-2 bg-red-500 text-white rounded"
+          >
+            <Trash className="h-5 w-5" />
+          </button>
         </PopoverContent>
       </Popover>
     </>
@@ -76,16 +86,6 @@ const ObjectForm = (props: {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     props.onUpdate(values);
   };
-
-  //   const watch = form.watch();
-
-  //   useEffect(() => {
-  //     // @ts-ignore
-  //     props.object.tooltip = watch.tooltip;
-  //     // @ts-ignore
-  //     props.object.url = watch.url;
-  //     // props.onUpdate(watch);
-  //   }, [watch]);
 
   return (
     <Form {...form}>

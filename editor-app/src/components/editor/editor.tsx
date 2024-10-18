@@ -32,7 +32,7 @@ export const Editor = (props: EditorProps) => {
     <FabricProvider onUpdate={onUpdate}>
       <div className="relative">
         <EditorController isSaving={props.isSaving} />
-        <div className="relative" ref={ref}>
+        <div className="relative mt-5 border-solid border-t border-b border-gray-300 " ref={ref}>
           <img
             className="w-full h-auto"
             src={src}

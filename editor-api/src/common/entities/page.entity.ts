@@ -1,4 +1,4 @@
-import { Publication } from 'src/publication/entities/publication.entity';
+import { Publication } from 'src/common/entities/publication.entity';
 import {
   AfterLoad,
   Column,

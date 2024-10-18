@@ -1,14 +1,11 @@
 import { PublicationsList } from "@/components/publications-list";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppConfig } from "./main";
 
 const queryClient = new QueryClient();
 
 type AppProps = {
-  configuration: {
-    api_url: string;
-    api_token: string;
-    publication_id?: number;
-  };
+  configuration: AppConfig
 };
 
 function App(props: AppProps) {

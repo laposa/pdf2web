@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
 
 const createClient = () => {
   const client = axios.create({
@@ -6,10 +6,8 @@ const createClient = () => {
   });
 
   client.interceptors.request.use(async (config) => {
-    //   const token = useStore.getState().token
-
-    //   config.headers = { ...config.headers } as AxiosHeaders
-    //   config.headers.Authorization = `Bearer ${token}`
+      config.headers = { ...config.headers } as AxiosHeaders
+      config.headers.Authorization = `Bearer ${window.pdf2WebConfig.api_key}`
     return config;
   });
 

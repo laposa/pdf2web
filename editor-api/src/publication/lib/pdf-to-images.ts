@@ -1,48 +1,51 @@
 import { mkdirSync, writeFileSync } from 'fs';
-import { getDocument } from 'pdfjs-dist';
 import { createCanvas } from 'canvas';
-import { Publication } from 'src/publication/entities/publication.entity';
+import { Publication } from 'src/common/entities/publication.entity';
+
+// dynamic import
+async function importPdfLib() {
+  const dynamicImport = new Function('specifier', 'return import(specifier)');
+  const pdfjsLib = await dynamicImport('pdfjs-dist/legacy/build/pdf.mjs');
+  return pdfjsLib;
+}
 
 export const convert = async (
   publication: Publication,
   file: Express.Multer.File,
 ): Promise<string[]> => {
-  try {
-    const paths = [];
-    const loadingTask = getDocument(new Uint8Array(file.buffer));
+  const paths = [];
 
-    const pdfDocument = await loadingTask.promise;
+  const { getDocument } = await importPdfLib();
+  const loadingTask = getDocument(new Uint8Array(file.buffer));
 
-    for (let i = 1; i <= pdfDocument.numPages; i++) {
-      const page = await pdfDocument.getPage(i);
-      const viewport = page.getViewport({ scale: 2.0 });
-      const canvas = createCanvas(viewport.width, viewport.height);
-      const context = canvas.getContext('2d');
+  const pdfDocument = await loadingTask.promise;
 
-      const renderTask = page.render({
-        canvasContext: context as any,
-        viewport: viewport,
-      });
+  for (let i = 1; i <= pdfDocument.numPages; i++) {
+    const page = await pdfDocument.getPage(i);
+    const viewport = page.getViewport({ scale: 2.0 });
+    const canvas = createCanvas(viewport.width, viewport.height);
+    const context = canvas.getContext('2d');
 
-      await renderTask.promise;
-      const image = canvas.toBuffer();
+    const renderTask = page.render({
+      canvasContext: context as any,
+      viewport: viewport,
+    });
 
-      const folder = `/uploads/${publication.id}`;
-      const filename = `output-${i}.png`;
+    await renderTask.promise;
+    const image = canvas.toBuffer();
 
-      const savePath = `${folder}/${filename}`;
+    const folder = `/uploads/${publication.id}`;
+    const filename = `output-${i}.png`;
 
-      mkdirSync(`./public${folder}`, { recursive: true });
+    const savePath = `${folder}/${filename}`;
 
-      writeFileSync(`./public${folder}/${filename}`, image);
+    mkdirSync(`./public${folder}`, { recursive: true });
+    writeFileSync(`./public${folder}/${filename}`, image);
 
-      paths.push(savePath);
-      // Release page resources.
-      page.cleanup();
-    }
-
-    return paths;
-  } catch (err) {
-    console.error(err);
+    paths.push(savePath);
+    // Release page resources.
+    page.cleanup();
   }
+
+  return paths;
 };

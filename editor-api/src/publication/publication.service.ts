@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Page } from 'src/publication/entities/page.entity';
+import { Page } from 'src/common/entities/page.entity';
 import { convert } from 'src/publication/lib/pdf-to-images';
-import { Publication } from 'src/publication/entities/publication.entity';
+import { Publication } from 'src/common/entities/publication.entity';
 import { CreatePublicationDto } from 'src/publication/dto/create-publication.dto';
 import { UpdatePublicationDto } from 'src/publication/dto/update-publication.dto';
 import { UpdatePageDto } from 'src/publication/dto/update-page.dto';
@@ -23,7 +23,7 @@ export class PublicationService {
     file: Express.Multer.File,
   ) {
     const publication = new Publication();
-    publication.title = CreatePublicationDto.title;
+    publication.title = CreatePublicationDto.title || file.originalname;
     publication.pages = [];
 
     let createdPublication = await this.publicationRepository.save(publication);
@@ -51,7 +51,6 @@ export class PublicationService {
   }
 
   async findOne(id: number) {
-    // TODO: is there a simpler way to order relationships?
     // order the pages by id
     const publication = await this.publicationRepository
       .createQueryBuilder('publication')
@@ -70,8 +69,7 @@ export class PublicationService {
       },
     });
 
-    publication.name = updatePublicationDto.name;
-    publication.author = updatePublicationDto.author;
+    publication.title = updatePublicationDto.title;
 
     await this.publicationRepository.save(publication);
 

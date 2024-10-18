@@ -11,14 +11,17 @@ import {
   Put,
   UsePipes,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { PublicationService } from './publication.service';
 import { CreatePublicationDto } from './dto/create-publication.dto';
 import { UpdatePublicationDto } from './dto/update-publication.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdatePageDto } from 'src/publication/dto/update-page.dto';
+import { ApiKeyGuard } from 'src/common/guards/api-key.guard';
 
 @Controller('publication')
+@UseGuards(ApiKeyGuard)
 export class PublicationController {
   constructor(private readonly publicationService: PublicationService) {}
 
@@ -29,7 +32,6 @@ export class PublicationController {
     @Body() createPublicationDto: CreatePublicationDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    // TODO: add file validation
     return this.publicationService.create(createPublicationDto, file);
   }
 

@@ -1,6 +1,5 @@
 import { Publication } from 'src/common/entities/publication.entity';
 import {
-  AfterLoad,
   Column,
   Entity,
   ManyToOne,
@@ -18,9 +17,6 @@ export class Page {
   @Column()
   filename: string;
 
-  @Column({ nullable: true })
-  url: string;
-
   @Column({
     type: 'json',
     nullable: true,
@@ -29,11 +25,4 @@ export class Page {
 
   @ManyToOne(() => Publication, (publication) => publication.pages)
   publication: Publication;
-
-  @AfterLoad()
-  generateUrl(): void {
-    this.url = `${process.env.APP_URL ?? 'http://localhost:3000'}${
-      this.filename
-    }`;
-  }
 }

@@ -1,15 +1,12 @@
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
 
 const createClient = () => {
-  const client = axios.create({
-    baseURL: "http://localhost:3000",
-  });
+  const client = axios.create();
 
   client.interceptors.request.use(async (config) => {
-    //   const token = useStore.getState().token
-
-    //   config.headers = { ...config.headers } as AxiosHeaders
-    //   config.headers.Authorization = `Bearer ${token}`
+    config.baseURL = window.pdf2webEditorConfig.apiUrl
+    config.headers = { ...config.headers } as AxiosHeaders
+    config.headers.Authorization = `Bearer ${window.pdf2webEditorConfig.apiKey}`
     return config;
   });
 

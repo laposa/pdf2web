@@ -1,15 +1,14 @@
-import { Page } from "src/publication/entities/page.entity";
+import { Page } from 'src/common/entities/page.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-@Entity("publication")
+@Entity('publication')
 export class Publication {
   @PrimaryGeneratedColumn()
   id: number;
@@ -17,19 +16,9 @@ export class Publication {
   @Column()
   title: string;
 
-  @Column({
-    nullable: true,
-  })
-  name: string;
-
-  @Column({
-    nullable: true,
-  })
-  author: string;
-
-  @OneToMany((type) => Page, (page) => page.publication, {
+  @OneToMany(() => Page, (page) => page.publication, {
     eager: true,
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
   pages: Page[];
 

@@ -1,8 +1,7 @@
 import { Area } from "@/components/editor/editor";
 import { FabricContext } from "@/components/fabric/fabric-context";
 import { useCallback, useEffect, useState } from "react";
-import { useDebounce } from "@uidotdev/usehooks";
-import { IObservable, Object as FObject } from "fabric/fabric-impl";
+import { Object as FObject } from "fabric/fabric-impl";
 import _debounce from "lodash/debounce";
 
 interface FabricProviderProps {
@@ -46,6 +45,8 @@ export const FabricProvider = (props: FabricProviderProps) => {
 
   useEffect(() => {
     if (canvas) {
+      setSelectedObject(null);
+
       canvas.on("object:modified", handleSave);
       canvas.on("object:added", handleSave);
       canvas.on("object:removed", handleSave);
@@ -72,7 +73,6 @@ export const FabricProvider = (props: FabricProviderProps) => {
   }, [canvas]);
 
   const handleObjectSelected = (event: fabric.IEvent<Event>) => {
-    console.log("handleObjectSelected");
     const object = event.selected?.[0];
     if (object !== undefined) {
       setSelectedObject(object);

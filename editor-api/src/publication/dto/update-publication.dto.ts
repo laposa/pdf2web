@@ -1,8 +1,6 @@
-import { PartialType } from "@nestjs/mapped-types";
-import { CreatePublicationDto } from "src/publication/dto/create-publication.dto";
+import { IsString } from 'class-validator';
 
-export class UpdatePublicationDto extends PartialType(CreatePublicationDto) {
-  readonly name: string;
+export class UpdatePublicationDto {
+  @IsString()
   readonly title: string;
-  readonly author: string;
 }

@@ -1,0 +1,8 @@
+name: Build editor API
+on: 
+  workflow_dispatch:
+jobs:
+  build:
+    uses: laposa/musgrave-shared/.github/workflows/build-and-push.yaml@master
+    with:
+      directory: "editor-api"

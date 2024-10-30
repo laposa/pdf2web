@@ -3,10 +3,10 @@ import { useEffect } from "react";
 
 type PageProps = {
   isActive?: boolean;
+  imagesBaseUrl?: string;
   page: any; // todo: shared types
 };
 
-const ANIMATE_FLASH_IN = {};
 export const Page = (props: PageProps) => {
   const { page, isActive } = props;
 
@@ -27,12 +27,14 @@ export const Page = (props: PageProps) => {
     }
   }, [isActive]);
 
+  const pageUrl = props.imagesBaseUrl ? `${props.imagesBaseUrl}${page.filename}` : page.filename;
+
   return (
     <div className="flex justify-center" onClick={() => startAnimation()}>
       <div className="relative p-8">
         <img
           className="h-[70vh] border w-auto max-w-full shadow-lg"
-          src={page.url}
+          src={pageUrl}
           alt="Image 1"
         />
         {page.areas_json &&

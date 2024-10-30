@@ -1,20 +1,19 @@
-import { PublicationsList } from "@/components/publications-list";
+import { PublicationEditor } from "@/components/publication-editor";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppConfig } from "./main";
 
 const queryClient = new QueryClient();
 
 type AppProps = {
-  configuration: {
-    api_url: string;
-    api_token: string;
-    publication_id?: number;
-  };
+  configuration: AppConfig
 };
 
 function App(props: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <PublicationsList publicationId={props.configuration.publication_id} />
+      <div className="flex justify-center">
+        <PublicationEditor publicationId={props.configuration.publicationId} />
+      </div>
     </QueryClientProvider>
   );
 }

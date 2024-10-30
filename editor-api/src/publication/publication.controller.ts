@@ -9,25 +9,30 @@ import {
   UseInterceptors,
   UploadedFile,
   Put,
-} from "@nestjs/common";
-import { PublicationService } from "./publication.service";
-import { CreatePublicationDto } from "./dto/create-publication.dto";
-import { UpdatePublicationDto } from "src/publication/dto/update-publication.dto";
-import { FileInterceptor } from "@nestjs/platform-express";
-import { UpdatePageDto } from "src/publication/dto/update-page.dto";
+  UsePipes,
+  ValidationPipe,
+  UseGuards,
+} from '@nestjs/common';
+import { PublicationService } from './publication.service';
+import { CreatePublicationDto } from './dto/create-publication.dto';
+import { UpdatePublicationDto } from './dto/update-publication.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdatePageDto } from 'src/publication/dto/update-page.dto';
+import { ApiKeyGuard } from 'src/common/guards/api-key.guard';
 
-@Controller("publication")
+@Controller('publication')
+@UseGuards(ApiKeyGuard)
 export class PublicationController {
   constructor(private readonly publicationService: PublicationService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor("file"))
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(ValidationPipe)
   create(
-    @Body() CreatePublicationDto: CreatePublicationDto,
-    @UploadedFile() file: Express.Multer.File
+    @Body() createPublicationDto: CreatePublicationDto,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    // TODO: add file validation
-    return this.publicationService.create(CreatePublicationDto, file);
+    return this.publicationService.create(createPublicationDto, file);
   }
 
   @Get()
@@ -35,29 +40,30 @@ export class PublicationController {
     return this.publicationService.findAll();
   }
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
+  @Get(':id')
+  findOne(@Param('id') id: string) {
     return this.publicationService.findOne(+id);
   }
 
-  @Patch(":id")
+  @Patch(':id')
   update(
-    @Param("id") id: string,
-    @Body() updatePublicationDto: UpdatePublicationDto
+    @Param('id') id: string,
+    @Body() updatePublicationDto: UpdatePublicationDto,
   ) {
     return this.publicationService.update(+id, updatePublicationDto);
   }
 
-  @Delete(":id")
-  remove(@Param("id") id: string) {
+  @Delete(':id')
+  remove(@Param('id') id: string) {
     return this.publicationService.remove(+id);
   }
 
-  @Put(":id/page/:pageId")
+  @Put(':id/page/:pageId')
+  @UsePipes(ValidationPipe)
   updatePage(
-    @Param("id") id: string,
-    @Param("pageId") pageId: string,
-    @Body() updatePageDto: UpdatePageDto
+    @Param('id') id: string,
+    @Param('pageId') pageId: string,
+    @Body() updatePageDto: UpdatePageDto,
   ) {
     return this.publicationService.updatePage(+id, +pageId, updatePageDto);
   }

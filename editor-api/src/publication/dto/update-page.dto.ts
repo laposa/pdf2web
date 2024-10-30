@@ -1,13 +1,30 @@
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
+
+export class PageAreaDto {
+  @IsString()
+  x: string;
+
+  @IsString()
+  y: string;
+
+  @IsString()
+  width: string;
+
+  @IsString()
+  height: string;
+
+  @IsString()
+  @IsOptional()
+  tooltip?: string;
+
+  @IsString()
+  url: string;
+}
+
 export class UpdatePageDto {
+  @IsString()
   readonly name: string;
-  readonly areas_json:
-    | {
-        x: string;
-        y: string;
-        width: string;
-        height: string;
-        tooltip?: string;
-        url: string;
-      }[]
-    | null;
+
+  @ValidateNested()
+  readonly areas_json: PageAreaDto[] | null;
 }

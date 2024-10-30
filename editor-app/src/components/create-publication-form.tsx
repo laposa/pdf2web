@@ -17,27 +17,24 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const formSchema = z.object({
-  title: z.string().min(1),
   file: z.instanceof(File),
 });
 
 export const CreatePublicationForm = (props: {
-  onRequestClose: () => void;
+  onRequestClose: (id: number) => void;
 }) => {
   const createPublicationMutation = useCreatePublication();
 
   const form = useForm<z.infer<typeof formSchema>>({
     mode: "onChange",
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-    },
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     createPublicationMutation.mutate(values, {
-      onSuccess: () => {
-        props.onRequestClose();
+      onSuccess: (data) => {
+        props.onRequestClose(data.publication.id);
+        window.dispatchEvent(new CustomEvent("pdf2webEditor.created", { detail: data.publication }));
       },
     });
   };
@@ -56,28 +53,16 @@ export const CreatePublicationForm = (props: {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input type="text" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="file"
           render={({ field: { onChange }, ...field }) => (
             <FormItem>
-              <FormLabel>File</FormLabel>
+              <FormLabel>PDF File</FormLabel>
               <FormControl>
                 <Input
                   type="file"
                   {...field}
                   onChange={(e) => onChange(e.target.files?.[0])}
+                  accept=".pdf"
                 />
               </FormControl>
               <FormMessage />

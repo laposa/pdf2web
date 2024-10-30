@@ -28,18 +28,19 @@ export const Publication = (props: PublicationProps) => {
 
   if (query.data) {
     return (
-      <div key={activePageIndex}>
+      <div>
         <h2 className="text-lg font-medium text-center border-b mb-2 pb-2">
           Publication: {query.data.title}
         </h2>
 
-        <div className="min-h-[600px]">
+        <div>
           {activePage ? (
             <Editor
-              src={activePage.url}
+              src={activePage.filename}
               data={activePage.areas_json}
               onUpdate={handleUpdatePage}
               isSaving={updatePageMutation.status === "pending"}
+              activePageIndex={activePageIndex}
             />
           ) : (
             <EmptyState text="No page found" />

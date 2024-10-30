@@ -1,22 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
+import { defineWebComponent } from "./define-web-component.tsx";
 
 export type AppConfig = {
-  api_url: string;
-  api_key: string;
-  publication_id?: number;
+  apiUrl: string;
+  apiKey: string;
+  imagesBaseUrl?: string;
+  publicationId?: number;
 };
 
-window.pdf2web = (options: AppConfig) => {
-  window.pdf2WebConfig = options;
+window.pdf2webEditor = (options: AppConfig) => {
+  window.pdf2webEditorConfig = options;
 
-  ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-      <App configuration={options} />
-    </React.StrictMode>
-  );
+  defineWebComponent();
 };
 
-window.dispatchEvent(new Event("pdf2web.loaded"));
+window.dispatchEvent(new Event("pdf2webEditor.loaded"));

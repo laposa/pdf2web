@@ -4,38 +4,24 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-    <style>
-      .app-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-
-      #root {
-        max-width: 800px;
-        width: 100%;
-        padding: 1rem;
-        border: 1px solid #eee;
-      }
-    </style>
+    <title>PDF2Web Editor</title>
   </head>
   <body>
-    <div class="app-container">
-      <div id="root"></div>
-    </div>
+
+    <pdf2web-editor></pdf2web-editor>
+
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      window.addEventListener("pdf2web.loaded", function () {
-        window.pdf2web({
-          api_url: "http://localhost:3000",
-          api_key: "test1234",
-          publication_id: null,
+    <script type="text/javascript">
+      window.addEventListener("pdf2webEditor.loaded", function () {
+        window.pdf2webEditor({
+          apiUrl: "http://localhost:3000",
+          apiKey: "test1234",
+          publicationId: 19,
+          imagesBaseUrl: "http://localhost:3000/",
         });
       });
 
-      window.addEventListener("pdf2web.created", function (event) {
+      window.addEventListener("pdf2webEditor.created", function (event) {
         console.log("Created event", event.detail);
       });
     </script>

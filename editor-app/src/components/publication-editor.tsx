@@ -4,11 +4,11 @@ import { Publication } from "@/components/publication";
 import { Loader } from "@/components/ui/loader";
 import { useState } from "react";
 
-type PublicationListProps = {
+type PublicationEditorProps = {
   publicationId?: number;
 };
 
-export const PublicationsList = (props: PublicationListProps) => {
+export const PublicationEditor = (props: PublicationEditorProps) => {
   const [selectedPublication, setSelectedPublication] = useState<
     number | undefined
   >(props.publicationId ?? undefined);

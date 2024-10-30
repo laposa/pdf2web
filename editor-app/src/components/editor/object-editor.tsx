@@ -50,7 +50,7 @@ export const ObjectEditor = () => {
         </PopoverTrigger>
         <PopoverContent sideOffset={20} side="left" align="center">
           <ObjectForm
-            key={selectedObject.id}
+            key={(selectedObject as any).id}
             object={selectedObject}
             onUpdate={() => {
               handleSave();

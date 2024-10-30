@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Loader, Plus } from "lucide-react";
 import { ObjectEditor } from "@/components/editor/object-editor";
 
+
 export type Area = {
   left: number;
   top: number;
@@ -21,6 +22,7 @@ type EditorProps = {
   data: Area[];
   onUpdate: (objects: Area[]) => void;
   isSaving: boolean;
+  activePageIndex: number;
 };
 
 export const Editor = (props: EditorProps) => {
@@ -28,19 +30,26 @@ export const Editor = (props: EditorProps) => {
   const { src, onUpdate } = props;
   const [imageLoaded, setImageLoaded] = useState(false);
 
+  let imageSrc = src;
+  if (window.pdf2webEditorConfig.imagesBaseUrl) {
+    imageSrc = `${window.pdf2webEditorConfig.imagesBaseUrl}${src}`;
+  } else {
+    imageSrc = `${window.pdf2webEditorConfig.apiUrl}${src}`;
+  }
+
   return (
     <FabricProvider onUpdate={onUpdate}>
       <div className="relative">
         <EditorController isSaving={props.isSaving} />
         <div className="relative mt-5 border-solid border-t border-b border-gray-300 " ref={ref}>
           <img
-            className="w-full h-auto"
-            src={src}
+            src={imageSrc}
             onLoad={() => setImageLoaded(true)}
             alt="Image to edit"
+            className="max-h-[75vh]"
           />
           {imageLoaded && ref.current ? (
-            <div className="absolute inset-0">
+            <div className="absolute inset-0" key={props.activePageIndex}>
               <FabricCanvas
                 width={ref.current.clientWidth}
                 height={ref.current.clientHeight}
@@ -49,6 +58,7 @@ export const Editor = (props: EditorProps) => {
             </div>
           ) : null}
         </div>
+
         <ObjectEditor />
       </div>
     </FabricProvider>

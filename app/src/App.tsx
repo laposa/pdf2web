@@ -3,18 +3,18 @@ import { useEffect, useState } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 import { Page } from "./components/page";
+import { AppOptions } from "./main";
 
 type AppProps = {
-  configuration: {
-    manifest_url: string;
-  };
+  configuration: AppOptions
 };
+
 function App(props: AppProps) {
   const [data, setData] = useState<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`${props.configuration.manifest_url}`).then((res) => {
+    fetch(`${props.configuration.manifestUrl}`).then((res) => {
       if (res.ok) {
         res.json().then((data) => setData(data));
       }
@@ -34,6 +34,7 @@ function App(props: AppProps) {
           <SplideSlide key={index}>
             <Page
               page={page}
+              imagesBaseUrl={props.configuration.imagesBaseUrl}
               key={`page-${index}`}
               isActive={index === activeIndex}
             />

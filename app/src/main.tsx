@@ -3,14 +3,12 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
-declare global {
-  interface Window {
-    pdf2webPublic: (options: any) => void;
-  }
+export type AppOptions = {
+  manifestUrl: string;
+  imagesBaseUrl?: string;
 }
 
-window.pdf2webPublic = (options) => {
-  console.log("Rendering pdf2webPublic editor", options);
+window.pdf2web = (options: AppOptions) => {
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
       <App configuration={options} />
@@ -18,4 +16,4 @@ window.pdf2webPublic = (options) => {
   );
 };
 
-window.dispatchEvent(new Event("pdf2webPublic.loaded"));
+window.dispatchEvent(new Event("pdf2web.loaded"));

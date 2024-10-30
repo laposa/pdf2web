@@ -4,15 +4,16 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>PDF2Web</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      window.addEventListener("pdf2webPublic.loaded", function () {
-        window.pdf2webPublic({
-          manifest_url: "http://localhost:3000/manifests/8.json",
+      window.addEventListener("pdf2web.loaded", function () {
+        window.pdf2web({
+          manifestUrl: "http://localhost:3000/manifests/16.json",
+          imagesBaseUrl: "http://localhost:3000/",
         });
       });
     </script>

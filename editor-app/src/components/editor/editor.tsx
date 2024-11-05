@@ -72,13 +72,13 @@ export const EditorController = (props: Pick<EditorProps, "isSaving">) => {
     if (canvas) {
       canvas.on("mouse:over", function (e: fabric.IEvent<Event>) {
         if (!e.target) return;
-        e.target.set("opacity", 0.4);
+        e.target.set("opacity", 0.6);
         canvas.renderAll();
       });
 
       canvas.on("mouse:out", function (e: fabric.IEvent<Event>) {
         if (!e.target) return;
-        e.target.set("opacity", 0.2);
+        e.target.set("opacity", 0.4);
         canvas.renderAll();
       });
     }
@@ -86,14 +86,21 @@ export const EditorController = (props: Pick<EditorProps, "isSaving">) => {
 
   const handleAddHotspot = () => {
     const rect = new fabric.Rect({
-      backgroundColor: "rgba(0,0,0)",
-      opacity: 0.2,
+      backgroundColor: "black",
+      borderColor: "white",
+      borderWidth: 1,
+      hasBorders: false,
+      cornerColor: "black",
+      cornerSize: 5,
+      cornerStrokeColor: "white",
+      lockScalingFlip: true,
+      opacity: 0.4,
       width: 100,
       height: 100,
       left: canvas.getWidth() / 2 - 50,
       top: canvas.getHeight() / 2 - 50,
-      strokeWidth: 1,
-      stroke: "white",
+      transparentCorners: false,
+      strokeUniform: true
     });
 
     canvas.add(rect);

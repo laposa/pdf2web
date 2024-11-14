@@ -58,11 +58,13 @@ function App(props: AppProps) {
       <div className="relative w-full flex justify-center ">
         {/* @ts-expect-error: types not implemented correctly in package */}
         <HTMLFlipBook
+          size="stretch"
           ref={flipbook}
           width={width}
           height={height}
           startPage={0}
-          flippingTime={300}
+          flippingTime={1000}
+          minWidth={330}
           showCover={true}
           onFlip={handleOnFlip}
         >

@@ -65,6 +65,7 @@ function App(props: AppProps) {
           startPage={0}
           flippingTime={1000}
           minWidth={330}
+          maxWidth={600}
           showCover={true}
           onFlip={handleOnFlip}
         >

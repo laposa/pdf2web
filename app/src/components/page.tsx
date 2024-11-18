@@ -32,16 +32,17 @@ export const Page = (props: PageProps) => {
 
   return (
     <div className="flex justify-center" onClick={() => startAnimation()}>
-      <div className="relative p-8">
+      <div className="relative">
         <img
-          className="h-[70vh] border w-auto max-w-full shadow-lg"
+          className="border w-auto max-w-full shadow-lg"
           src={pageUrl}
           alt="Image 1"
         />
         {page.areas &&
           page.areas.length > 0 &&
-          page.areas.map((area) => (
+          page.areas.map((area, index) => (
             <div
+              key={`area-${index}`}
               className="absolute group"
               style={{
                 left: `${area.left}%`,

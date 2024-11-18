@@ -14,19 +14,13 @@ const dimensions = {
 };
 
 function App(props: AppProps) {
-  const [data, setData] = useState<any>(null);
+  const { manifest, imagesBaseUrl } = props.configuration;
   const flipbook = React.createRef<typeof HTMLFlipBook>();
   const [activeIndex, setActiveIndex] = useState(0);
   const [width, setWidth] = useState(dimensions.width);
   const [height, setHeight] = useState(dimensions.height);
 
   useEffect(() => {
-    fetch(`${props.configuration.manifestUrl}`).then((res) => {
-      if (res.ok) {
-        res.json().then((data) => setData(data));
-      }
-    });
-
     if (typeof window !== undefined) {
       const maxHeight = window.innerHeight - 300;
 
@@ -48,10 +42,9 @@ function App(props: AppProps) {
 
   const handleOnFlip = (e) => {
     setActiveIndex(e.data);
-    const audio = new Audio("/flip-sound.mp3"); // Initialize the audio with the file
+    const audio = new Audio("/sounds/flip-sound.mp3"); // Initialize the audio with the file
     audio.play(); // Pla
   };
-  if (!data) return null;
 
   return (
     <div className="fixed inset-0 flex flex-col justify-center items-center h-full font-sans px-4">
@@ -69,11 +62,11 @@ function App(props: AppProps) {
           showCover={true}
           onFlip={handleOnFlip}
         >
-          {data.pages.map((page, index) => (
+          {manifest.pages.map((page, index) => (
             <div>
               <Page
                 page={page}
-                imagesBaseUrl={props.configuration.imagesBaseUrl}
+                imagesBaseUrl={imagesBaseUrl}
                 key={`page-${index}`}
                 isActive={index === activeIndex}
               />
@@ -90,7 +83,7 @@ function App(props: AppProps) {
         </button>
 
         <div>
-          Page {activeIndex + 1} of {data.pages.length}
+          Page {activeIndex + 1} of {manifest.pages.length}
         </div>
         <button
           onClick={handleNext}

@@ -14,16 +14,12 @@ async function bootstrap() {
   const config = app.get(appConfig.KEY);
   app.enableCors({
     origin: '*',
-    allowedHeaders: 'Authorization, Cache-Control, Apikey, Content-Type',
+    allowedHeaders: 'Authorization, Cache-Control, Content-Type',
   });
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
-  // app.use(
-  //   helmet({
-  //     crossOriginResourcePolicy: false,
-  //   }),
-  // );
+  app.use(helmet());
 
   app.useGlobalFilters(new AppFilter());
   const logger = app.get(AppLoggerService);

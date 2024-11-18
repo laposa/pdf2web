@@ -1,10 +1,11 @@
+import { PdfPage } from "@/shared";
 import { motion, useAnimationControls } from "framer-motion";
 import { useEffect } from "react";
 
 type PageProps = {
   isActive?: boolean;
   imagesBaseUrl?: string;
-  page: any; // todo: shared types
+  page: PdfPage;
 };
 
 export const Page = (props: PageProps) => {
@@ -27,9 +28,7 @@ export const Page = (props: PageProps) => {
     }
   }, [isActive]);
 
-  const pageUrl = props.imagesBaseUrl
-    ? `${props.imagesBaseUrl}${page.filename}`
-    : page.filename;
+  const pageUrl = props.imagesBaseUrl ? `${props.imagesBaseUrl}/${page.filename}` : page.filename;
 
   return (
     <div className="flex justify-center" onClick={() => startAnimation()}>
@@ -39,9 +38,9 @@ export const Page = (props: PageProps) => {
           src={pageUrl}
           alt="Image 1"
         />
-        {page.areas_json &&
-          page.areas_json.length > 0 &&
-          page.areas_json.map((area, index) => (
+        {page.areas &&
+          page.areas.length > 0 &&
+          page.areas.map((area, index) => (
             <div
               key={`area-${index}`}
               className="absolute group"

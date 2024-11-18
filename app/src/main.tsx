@@ -2,9 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
+import { PdfManifest } from "@/shared";
 
 export type AppOptions = {
-  manifestUrl: string;
+  manifest: PdfManifest;
   imagesBaseUrl?: string;
 }
 

@@ -15,10 +15,10 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IObservable, Object } from "fabric/fabric-impl";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Trash } from "lucide-react";
+import { PdfPageArea } from "@/shared";
 
 const formSchema = z.object({
   url: z.string().url().optional(),
@@ -70,16 +70,14 @@ export const ObjectEditor = () => {
 
 const ObjectForm = (props: {
   onUpdate: (values: z.infer<typeof formSchema>) => void;
-  object: IObservable<Object>;
+  object: PdfPageArea;
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
-      // @ts-ignore
-      url: props.object.url,
-      // @ts-ignore
-      tooltip: props.object.tooltip,
+      url: props.object.url || "",
+      tooltip: props.object.tooltip || "",
     },
   });
 
@@ -103,7 +101,6 @@ const ObjectForm = (props: {
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
-                    // @ts-ignore
                     props.object.url = e.target.value;
                     props.onUpdate(form.getValues());
                   }}
@@ -126,7 +123,6 @@ const ObjectForm = (props: {
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
-                    // @ts-ignore
                     props.object.tooltip = e.target.value;
                     props.onUpdate(form.getValues());
                   }}

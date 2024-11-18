@@ -1,11 +1,11 @@
-import { Object } from "fabric/fabric-impl";
+import { PdfPageArea } from "@/shared";
 import { createContext } from "react";
 
 type FabricContextType = {
   canvas: any;
   setCanvas: (canvas: any) => void;
   handleSave: () => void;
-  selectedObject: Object | null | undefined;
+  selectedObject: PdfPageArea | null | undefined;
   position: { x: number; y: number; width: number; height: number };
 };
 

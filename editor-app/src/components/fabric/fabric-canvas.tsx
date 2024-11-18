@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import { fabric } from "fabric";
 import { useFabric } from "@/components/fabric/use-fabric";
-import { Area } from "@/components/editor/editor";
+import { PdfPageArea } from "@/shared";
 
 type FabricCanvasProps = {
   options?: fabric.ICanvasOptions;
   width?: number;
   height?: number;
-  initialData?: Area[];
+  initialData?: PdfPageArea[];
 };
 
 export const FabricCanvas = (props: FabricCanvasProps) => {

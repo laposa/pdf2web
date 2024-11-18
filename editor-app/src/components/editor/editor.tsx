@@ -4,24 +4,14 @@ import { useFabric } from "@/components/fabric/use-fabric";
 import { useEffect, useRef, useState } from "react";
 import { fabric } from "fabric";
 import { Button } from "@/components/ui/button";
-import { Loader, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { ObjectEditor } from "@/components/editor/object-editor";
-
-
-export type Area = {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  url?: string;
-  tooltip?: string;
-};
+import { PdfPageArea } from "@/shared";
 
 type EditorProps = {
   src: string;
-  data: Area[];
-  onUpdate: (objects: Area[]) => void;
-  isSaving: boolean;
+  data: PdfPageArea[];
+  onUpdate: (objects: PdfPageArea[]) => void;
   activePageIndex: number;
 };
 
@@ -30,17 +20,12 @@ export const Editor = (props: EditorProps) => {
   const { src, onUpdate } = props;
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  let imageSrc = src;
-  if (window.pdf2webEditorConfig.imagesBaseUrl) {
-    imageSrc = `${window.pdf2webEditorConfig.imagesBaseUrl}${src}`;
-  } else {
-    imageSrc = `${window.pdf2webEditorConfig.apiUrl}${src}`;
-  }
+  const imageSrc = `${window.pdf2webEditorConfig.imagesBaseUrl}/${src}`.replace('\//\g', '/');
 
   return (
     <FabricProvider onUpdate={onUpdate}>
       <div className="relative">
-        <EditorController isSaving={props.isSaving} />
+        <EditorController />
         <div className="relative mt-5 border-solid border-t border-b border-gray-300 " ref={ref}>
           <img
             src={imageSrc}
@@ -65,8 +50,8 @@ export const Editor = (props: EditorProps) => {
   );
 };
 
-export const EditorController = (props: Pick<EditorProps, "isSaving">) => {
-  const { canvas, handleSave } = useFabric();
+export const EditorController = () => {
+  const { canvas } = useFabric();
 
   useEffect(() => {
     if (canvas) {
@@ -88,6 +73,8 @@ export const EditorController = (props: Pick<EditorProps, "isSaving">) => {
     const rect = new fabric.Rect({
       backgroundColor: "black",
       borderColor: "white",
+      // @ts-ignore
+      id: +new Date(),
       borderWidth: 1,
       hasBorders: false,
       cornerColor: "black",
@@ -113,21 +100,6 @@ export const EditorController = (props: Pick<EditorProps, "isSaving">) => {
         <Plus className="w-4 h-4 mr-2" />
         Add Hotspot
       </Button>
-
-      <Button
-        size="sm"
-        type="button"
-        onClick={() => handleSave()}
-        disabled={props.isSaving}
-      >
-        Save
-      </Button>
-
-      <div className="ml-auto flex items-center">
-        {props.isSaving ? (
-          <Loader className="w-4 h-4 mr-2 text-gray-900 animate-spin" />
-        ) : null}
-      </div>
     </div>
   );
 };

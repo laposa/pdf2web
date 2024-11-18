@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@/shared": ["../shared/src"],
       "@/*": ["./src/*"]
     },
     "target": "ES2020",
@@ -9,6 +10,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "outDir": "./dist",
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -24,8 +26,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "composite": true
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [
+    { "path": "../shared" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }

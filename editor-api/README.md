@@ -1,42 +1,39 @@
 # Pdf2web API
 
 - accept PDF and convert to images (using PDF.js)
-- accept submission for newly defined areas for specific PDF
-- provide list of images for specific PDF
-- provide list of zones for specific PDF/images
 
 ## API spec
 
-Client id and secret will be saved in .env. We need only only two clients right now: supervalu, centra.
-
-POST /publications
+POST /convert
 request: pdf file as body
-response: publication object
+response: zip file with images and json file with metadata (further used by the editor / viewer)
 
-GET /publications
-request:
-response: array of publication (id, name, created, updated)
+Example usage:
 
-GET /publications/{publication id}
-request:
-reponse: publication object
+```bash
+# Define the PDF file path
+PDF_FILE_PATH="./example.pdf"
 
-POST /publication/{publication id}/area
-request: area object without id (page number, x, y, width, height, tooltip, url)
-response: area object including ID
+# Define the output ZIP file path
+OUTPUT_ZIP_PATH="./output.zip"
 
-DELETE /publication/{publication id}/area/{area object id}
-request:
-reponse: 200 ok
+# Define the output folder for unzipping
+OUTPUT_FOLDER="./output"
 
-##  Publication object
+# Send the PDF file to the conversion endpoint and save the ZIP file
+curl -X POST -F "file=@${PDF_FILE_PATH}" http://localhost:3000/convert -o ${OUTPUT_ZIP_PATH}
+
+# Unzip the ZIP file into the output folder
+unzip ${OUTPUT_ZIP_PATH} -d ${OUTPUT_FOLDER}
+```
+
+## Conversion manifest
 
 ````json
 {
     "id": 1,
     "name": "Spring brochure test 3",
     "title": "SuperValu spring offers",
-    "author": "Norbert Laposa",
     "created": "2023-10-24 15:00:00.000Z",
     "modified": "2023-10-24 15:00:00.000Z",
     "pages": [
@@ -46,37 +43,3 @@ reponse: 200 ok
 
 }
 ````
-
-## Database
-
-One table:
-
-pdf_publication (
-    id serial,
-    name varchar(255),
-    title varchar(255),
-    author: varchar(255),
-    created: datetime,
-    modified: datetime
-)
-
-pdf_publication_page (
-    id serial,
-    pdf_publication_id integer REFERENCES pdf_publication ON UPDATE CASCADE ON DELETE CASCADE,
-    filename varchar(255),
-    created: datetime,
-    modified: datetime
-)
-
-pdf_publication_page_area (
-    id serial,
-    pdf_publication_page_id integer REFERENCES pdf_publication_page ON UPDATE CASCADE ON DELETE CASCADE,
-    coordinate_x smallint,
-    coordinate_y smallint,
-    width smallint,
-    height smallint,
-    tooltip varchar(255),
-    url text,
-    created: datetime,
-    modified: datetime
-)

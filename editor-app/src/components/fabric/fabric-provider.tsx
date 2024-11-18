@@ -1,15 +1,17 @@
-import { Area } from "@/components/editor/editor";
 import { FabricContext } from "@/components/fabric/fabric-context";
 import { useCallback, useEffect, useState } from "react";
 import { Object as FObject } from "fabric/fabric-impl";
 import _debounce from "lodash/debounce";
+import { PdfPageArea } from "@/shared";
 
 interface FabricProviderProps {
   children: React.ReactNode;
-  onUpdate: (objects: Area[]) => void;
+  onUpdate: (objects: PdfPageArea[]) => void;
 }
 
-const getPosition = (object: FObject) => {
+type PdfPageAreaObject = PdfPageArea & FObject;
+
+const getPosition = (object: PdfPageAreaObject) => {
   return {
     x: object.left ?? 0,
     y: object.top ? object.top + 50 : 0,
@@ -20,7 +22,7 @@ const getPosition = (object: FObject) => {
 
 export const FabricProvider = (props: FabricProviderProps) => {
   const [canvas, setCanvas] = useState<any>(null);
-  const [selectedObject, setSelectedObject] = useState<FObject | null>();
+  const [selectedObject, setSelectedObject] = useState<PdfPageAreaObject | null>();
   const [position, setPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
 
   const handleSave = () => {
@@ -58,13 +60,13 @@ export const FabricProvider = (props: FabricProviderProps) => {
       });
 
       canvas.on("object:moving", (event: fabric.IEvent<Event>) => {
-        const object = event.target;
+        const object = event.target as PdfPageAreaObject;
         if (object) {
           setPosition(getPosition(object));
         }
       });
       canvas.on("object:scaling", (event: fabric.IEvent<Event>) => {
-        const object = event.target;
+        const object = event.target as PdfPageAreaObject;
         if (object) {
           setPosition(getPosition(object));
         }
@@ -73,7 +75,7 @@ export const FabricProvider = (props: FabricProviderProps) => {
   }, [canvas]);
 
   const handleObjectSelected = (event: fabric.IEvent<Event>) => {
-    const object = event.selected?.[0];
+    const object = event.selected?.[0] as PdfPageAreaObject;
     if (object !== undefined) {
       setSelectedObject(object);
     }

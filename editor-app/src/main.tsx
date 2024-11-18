@@ -1,10 +1,9 @@
+import type { PdfManifest } from "@/shared";
 import { defineWebComponent } from "./define-web-component.tsx";
 
 export type AppConfig = {
-  apiUrl: string;
-  apiKey: string;
-  imagesBaseUrl?: string;
-  publicationId?: number;
+  manifest: PdfManifest;
+  imagesBaseUrl: string;
 };
 
 window.pdf2webEditor = (options: AppConfig) => {

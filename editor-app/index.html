@@ -14,15 +14,101 @@
     <script type="text/javascript">
       window.addEventListener("pdf2webEditor.loaded", function () {
         window.pdf2webEditor({
-        apiUrl: "https://pdf2web-centra.api.preprod.musgrave.io/v1",
-        apiKey: "FC6MQV2u7SLwUv3T",
-        imagesBaseUrl: "https://centra.preprod.musgrave.io/pdf2web",
-        publicationId: "1",
+          manifest: {
+            "id": "625244a0-d644-4224-823f-5ef7bdc016b1",
+            "source": "example.pdf",
+            "createdAt": "2024-11-14T15:54:56.722Z",
+            "updatedAt": "2024-11-14T15:54:56.722Z",
+            "pages": [
+              {
+                "id": "0f3cab14-1bca-4af0-9a04-9edca1b7f51c",
+                "order": 1,
+                "filename": "0f3cab14-1bca-4af0-9a04-9edca1b7f51c.png",
+                "areas": [
+                  {
+                    "left": 23.68,
+                    "top": 18.78,
+                    "width": 53.12,
+                    "height": 63.42,
+                    "tooltip": "GitHub",
+                    "url": "https://github.com/laposa/pdf2web"
+                  },
+                  {
+                    "left": 78.53,
+                    "top": 87.88,
+                    "width": 14.85,
+                    "height": 10.51,
+                    "tooltip": "Issues",
+                    "url": "https://github.com/laposa/pdf2web/issues"
+                  }
+                ]
+              },
+              {
+                "id": "2085de84-8a11-40fd-a9a9-eaf4711da073",
+                "order": 2,
+                "filename": "2085de84-8a11-40fd-a9a9-eaf4711da073.png",
+                "areas": []
+              },
+              {
+                "id": "b2a4aa91-3f15-445f-8b12-c58d206b8efe",
+                "order": 3,
+                "filename": "b2a4aa91-3f15-445f-8b12-c58d206b8efe.png",
+                "areas": []
+              },
+              {
+                "id": "b9704775-a591-46e3-a2c9-d1914bf84318",
+                "order": 4,
+                "filename": "b9704775-a591-46e3-a2c9-d1914bf84318.png",
+                "areas": []
+              },
+              {
+                "id": "78aff8f5-2b06-476f-b64b-6ef06b62d733",
+                "order": 5,
+                "filename": "78aff8f5-2b06-476f-b64b-6ef06b62d733.png",
+                "areas": []
+              },
+              {
+                "id": "390d8b7e-afa7-44c6-9985-5c514470bfce",
+                "order": 6,
+                "filename": "390d8b7e-afa7-44c6-9985-5c514470bfce.png",
+                "areas": []
+              },
+              {
+                "id": "e1ee274d-cad4-4c4a-9c67-daf03d1ece1c",
+                "order": 7,
+                "filename": "e1ee274d-cad4-4c4a-9c67-daf03d1ece1c.png",
+                "areas": []
+              },
+              {
+                "id": "17cc0ef6-3724-42a2-b9b7-d2a687af90b5",
+                "order": 8,
+                "filename": "17cc0ef6-3724-42a2-b9b7-d2a687af90b5.png",
+                "areas": []
+              },
+              {
+                "id": "a13e0a79-b4a1-478b-b231-5c710e5442c3",
+                "order": 9,
+                "filename": "a13e0a79-b4a1-478b-b231-5c710e5442c3.png",
+                "areas": [
+                  {
+                    "left": 78.09,
+                    "top": 87.36,
+                    "width": 14.85,
+                    "height": 10.51,
+                    "tooltip": "Created by",
+                    "url": "https://laposa.ie"
+                  }
+                ]
+              }
+            ]
+          },
+          imagesBaseUrl: "/example",
         });
       });
 
-      window.addEventListener("pdf2webEditor.created", function (event) {
-        console.log("Created event", event.detail);
+      window.addEventListener("pdf2webEditor.updated", function (event) {
+        console.log("Updated event", event.detail);
+        console.log(JSON.stringify(event.detail));
       });
     </script>
   </body>

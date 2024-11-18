@@ -42,7 +42,7 @@ function App(props: AppProps) {
 
   const handleOnFlip = (e) => {
     setActiveIndex(e.data);
-    const audio = new Audio("/flip-sound.mp3"); // Initialize the audio with the file
+    const audio = new Audio("/sounds/flip-sound.mp3"); // Initialize the audio with the file
     audio.play(); // Pla
   };
 

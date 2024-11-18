@@ -31,10 +31,12 @@ function App(props: AppProps) {
   }, []);
 
   const handleNext = () => {
+    // @ts-expect-error: types not implemented correctly in package
     flipbook.current?.pageFlip().flipNext();
   };
 
   const handlePrev = () => {
+    // @ts-expect-error: types not implemented correctly in package
     flipbook.current?.pageFlip().flipPrev();
   };
 
@@ -47,6 +49,7 @@ function App(props: AppProps) {
   return (
     <div className="fixed inset-0 flex flex-col justify-center items-center h-full font-sans px-4">
       <div className="relative w-full flex justify-center ">
+        {/* @ts-expect-error: types not implemented correctly in package */}
         <HTMLFlipBook
           size="stretch"
           ref={flipbook}

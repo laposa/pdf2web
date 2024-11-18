@@ -19,35 +19,42 @@ export const PublicationEditor = (props: PublicationEditorProps) => {
       setManifest(event.detail);
     };
 
-    window.addEventListener("pdf2webEditor.setManifest", (handler as unknown) as EventListener);
-    return () => window.removeEventListener("pdf2webEditor.setManifest", (handler as unknown) as EventListener);
+    window.addEventListener(
+      "pdf2webEditor.setManifest",
+      handler as unknown as EventListener
+    );
+    return () =>
+      window.removeEventListener(
+        "pdf2webEditor.setManifest",
+        handler as unknown as EventListener
+      );
   }, []);
 
-  function handleUpdatePage(areas: PdfPageArea[]) {
-    setActivePageIndex((currentPageIndex) => {
-      setManifest((manifest) => {
+  const handleUpdatePage = (areas: PdfPageArea[]) => {
+    const activePage = manifest.pages.find(
+      (page) => page.order === activePageIndex + 1
+    )!;
+    const updatedPages = manifest.pages.map((page) =>
+      page.id === activePage.id ? { ...page, areas } : page
+    );
 
-        const activePage = manifest.pages.find((page) => page.order === currentPageIndex + 1)!;
-        const updatedPages = manifest.pages.map((page) =>
-          page.id === activePage.id ? { ...page, areas } : page
-        );
+    const updatedManifest = { ...manifest, pages: updatedPages };
 
-        const newManifest = { ...manifest, pages: updatedPages };
-        window.dispatchEvent(new CustomEvent("pdf2webEditor.updated", { detail: newManifest }));
+    setManifest(updatedManifest);
 
-        return newManifest
-      });
-
-      return currentPageIndex;
-    });
+    window.dispatchEvent(
+      new CustomEvent("pdf2webEditor.updated", { detail: updatedManifest })
+    );
   };
 
-  const activePage = manifest.pages.find((page) => page.order === activePageIndex + 1)!;
+  const activePage = manifest.pages.find(
+    (page) => page.order === activePageIndex + 1
+  )!;
 
   return (
     <div>
       <h2 className="text-lg font-medium text-center border-b mb-2 pb-2">
-        Publication: {manifest.source}
+        Publication: {manifest.source} - {activePageIndex}
       </h2>
 
       <div>
@@ -60,9 +67,9 @@ export const PublicationEditor = (props: PublicationEditorProps) => {
           />
         ) : (
           <EmptyState text="No pages found" />
-          )}
+        )}
       </div>
-        
+
       <Pagination
         activePage={activePageIndex}
         updatePage={(index) => setActivePageIndex(index)}

@@ -22,7 +22,8 @@ const getPosition = (object: PdfPageAreaObject) => {
 
 export const FabricProvider = (props: FabricProviderProps) => {
   const [canvas, setCanvas] = useState<any>(null);
-  const [selectedObject, setSelectedObject] = useState<PdfPageAreaObject | null>();
+  const [selectedObject, setSelectedObject] =
+    useState<PdfPageAreaObject | null>();
   const [position, setPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
 
   const handleSave = () => {
@@ -35,15 +36,8 @@ export const FabricProvider = (props: FabricProviderProps) => {
       url: o.url,
     }));
 
-    debouncedSave(objects);
+    props.onUpdate(objects);
   };
-
-  const debouncedSave = useCallback(
-    _debounce((payload) => {
-      props.onUpdate(payload);
-    }, 1000),
-    []
-  );
 
   useEffect(() => {
     if (canvas) {

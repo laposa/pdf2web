@@ -1,11 +1,13 @@
-FROM node:18-bookworm
+FROM node:20-bookworm
 
 RUN apt-get -y update && \
     apt-get -y upgrade
 
 WORKDIR /usr/src/app
-ADD . /usr/src/app
+ADD editor-api /usr/src/app/editor-api
+ADD shared /usr/src/app/shared
 
+WORKDIR /usr/src/app/editor-api
 RUN npm install \
     && npm  run build
 

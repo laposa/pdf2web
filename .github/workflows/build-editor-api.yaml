@@ -30,7 +30,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: "{{defaultContext}}:editor-api"
           push: true
           tags: |
             laposa/pdf2web-editor-api:latest

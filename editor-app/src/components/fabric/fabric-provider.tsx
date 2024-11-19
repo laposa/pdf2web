@@ -1,5 +1,5 @@
 import { FabricContext } from "@/components/fabric/fabric-context";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Object as FObject } from "fabric/fabric-impl";
 import _debounce from "lodash/debounce";
 import { PdfPageArea } from "@/shared";

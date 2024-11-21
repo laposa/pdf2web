@@ -12,4 +12,4 @@ RUN npm install \
     && npm  run build
 
 USER node
-CMD node dist/main
+CMD node dist/editor-api/src/main

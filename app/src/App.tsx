@@ -20,15 +20,16 @@ function App(props: AppProps) {
   const [width, setWidth] = useState(dimensions.width);
   const [height, setHeight] = useState(dimensions.height);
 
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      const maxHeight = window.innerHeight - 300;
-
-      const ratio = dimensions.height / dimensions.width;
-      setWidth(maxHeight / ratio);
-      setHeight(maxHeight);
-    }
-  }, []);
+  // Not working when size is set to "stretch"
+  // useEffect(() => {
+  //   if (typeof window !== undefined) {
+  //     const maxHeight = window.innerHeight - 300;
+  //     const ratio = dimensions.height / dimensions.width;
+  
+  //     setWidth(maxHeight / ratio);
+  //     setHeight(maxHeight);
+  //   }
+  // }, []);
 
   const handleNext = () => {
     // @ts-expect-error: types not implemented correctly in package
@@ -43,12 +44,12 @@ function App(props: AppProps) {
   const handleOnFlip = (e) => {
     setActiveIndex(e.data);
     const audio = new Audio("/sounds/flip-sound.mp3"); // Initialize the audio with the file
-    audio.play(); // Pla
+    audio.play(); // Play the audio
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col justify-center items-center h-full font-sans px-4">
-      <div className="relative w-full flex justify-center ">
+    <div className="fixed inset-0 flex flex-col justify-center items-center h-full font-sans px-4 page-flip-wrapper">
+      <div className="relative w-full flex justify-center leaflet">
         {/* @ts-expect-error: types not implemented correctly in package */}
         <HTMLFlipBook
           size="stretch"
@@ -74,7 +75,8 @@ function App(props: AppProps) {
           ))}
         </HTMLFlipBook>
       </div>
-      <div className="flex items-center gap-4 justify-center mt-4">
+
+      <div className="flex items-center gap-4 justify-center mt-4 pagination">
         <button
           onClick={handlePrev}
           className="w-8 h-8 border rounded flex items-center justify-center"

@@ -24,7 +24,7 @@ export const Editor = (props: EditorProps) => {
 
   return (
     <FabricProvider onUpdate={onUpdate}>
-      <div className="editor-page-flip-wrapper">
+      <div className="relative">
         <EditorController />
         <div className="relative mt-5 border-solid border-t border-b border-gray-300 " ref={ref}>
           <img

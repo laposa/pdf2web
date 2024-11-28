@@ -89,7 +89,7 @@ const Pagination = (props: PaginationProps) => {
   const { activePage, updatePage, numPages } = props;
 
   return (
-    <div className="editor-pagination">
+    <div className="flex py-2 select-none items-center">
       <Button
         size="sm"
         variant="outline"
@@ -98,7 +98,7 @@ const Pagination = (props: PaginationProps) => {
       >
         <ArrowLeft />
       </Button>
-      <div className="text-center font-bold">
+      <div className="flex-1 text-center font-bold">
         {activePage + 1}/{numPages}
       </div>
 

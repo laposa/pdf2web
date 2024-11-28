@@ -83,8 +83,8 @@
 
 .page-flip-wrapper {
   padding: 50px 20px;
-}
 
-.page-flip-wrapper .leaflet{
-  max-height: 85%;
+  .leaflet {
+    max-height: 85%;
+  }
 }

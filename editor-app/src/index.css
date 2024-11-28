@@ -74,18 +74,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-.editor-page-flip-wrapper {
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  align-items: center;
-}
-
-.editor-pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  align-items: center;
-  gap: 2rem;
-}

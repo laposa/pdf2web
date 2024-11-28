@@ -83,8 +83,10 @@
 
 .page-flip-wrapper {
   padding: 50px 20px;
-
-  .leaflet {
-    max-height: 85%;
-  }
 }
+
+.page-flip-wrapper .leaflet {
+  max-height: 85%;
+}
+
+div.pagination {z-index: 100; padding-top: 20px}

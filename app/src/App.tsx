@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Page } from "./components/page";
 import { AppOptions } from "./main";
 import HTMLFlipBook from "react-pageflip";
@@ -8,6 +8,7 @@ type AppProps = {
   configuration: AppOptions;
 };
 
+// TODO check image size from actual content
 const dimensions = {
   width: 1190,
   height: 1683,
@@ -17,19 +18,6 @@ function App(props: AppProps) {
   const { manifest, imagesBaseUrl } = props.configuration;
   const flipbook = React.createRef<typeof HTMLFlipBook>();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [width, setWidth] = useState(dimensions.width);
-  const [height, setHeight] = useState(dimensions.height);
-
-  // Not working when size is set to "stretch"
-  // useEffect(() => {
-  //   if (typeof window !== undefined) {
-  //     const maxHeight = window.innerHeight - 300;
-  //     const ratio = dimensions.height / dimensions.width;
-  
-  //     setWidth(maxHeight / ratio);
-  //     setHeight(maxHeight);
-  //   }
-  // }, []);
 
   const handleNext = () => {
     // @ts-expect-error: types not implemented correctly in package
@@ -54,8 +42,8 @@ function App(props: AppProps) {
         <HTMLFlipBook
           size="stretch"
           ref={flipbook}
-          width={width}
-          height={height}
+          width={dimensions.width}
+          height={dimensions.height}
           startPage={0}
           flippingTime={1000}
           minWidth={330}

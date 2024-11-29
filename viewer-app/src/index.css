@@ -3,6 +3,7 @@
   .leaflet {
     display: none;
     background-size: cover;
+    max-height: 85vh;
   } 
 
   .page {

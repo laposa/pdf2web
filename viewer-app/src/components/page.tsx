@@ -31,10 +31,10 @@ export const Page = (props: PageProps) => {
   const pageUrl = props.imagesBaseUrl ? `${props.imagesBaseUrl}/${page.filename}` : page.filename;
 
   return (
-    <div className="flex justify-center" onClick={() => startAnimation()}>
+    <div className="page" onClick={() => startAnimation()}>
       <div className="relative">
         <img
-          className="border w-auto max-w-full shadow-lg"
+          className=""
           src={pageUrl}
           alt="Image 1"
         />
@@ -56,10 +56,10 @@ export const Page = (props: PageProps) => {
                 whileHover={{ opacity: 0.5 }}
                 href={area.url}
                 target="_blank"
-                className="absolute inset-0 transition-all duration-700 bg-indigo-600 opacity-0"
+                className=""
               ></motion.a>
               {area.tooltip ? (
-                <div className="absolute opacity-0 transition-all duration-700 top-[100%] left-1/2 -translate-x-1/2 py-1 px-6 rounded shadow bg-white group-hover:opacity-100">
+                <div className="">
                   {area.tooltip}
                 </div>
               ) : null}

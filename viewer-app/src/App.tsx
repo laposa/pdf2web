@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import { Page } from "./components/page";
 import { AppOptions } from "./main";
 import HTMLFlipBook from "react-pageflip";
@@ -8,28 +8,10 @@ type AppProps = {
   configuration: AppOptions;
 };
 
-const dimensions = {
-  width: 1190,
-  height: 1683,
-};
-
 function App(props: AppProps) {
   const { manifest, imagesBaseUrl } = props.configuration;
   const flipbook = React.createRef<typeof HTMLFlipBook>();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [width, setWidth] = useState(dimensions.width);
-  const [height, setHeight] = useState(dimensions.height);
-
-  // Not working when size is set to "stretch"
-  // useEffect(() => {
-  //   if (typeof window !== undefined) {
-  //     const maxHeight = window.innerHeight - 300;
-  //     const ratio = dimensions.height / dimensions.width;
-  
-  //     setWidth(maxHeight / ratio);
-  //     setHeight(maxHeight);
-  //   }
-  // }, []);
 
   const handleNext = () => {
     // @ts-expect-error: types not implemented correctly in package
@@ -48,20 +30,22 @@ function App(props: AppProps) {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col justify-center items-center h-full font-sans px-4 page-flip-wrapper">
-      <div className="relative w-full flex justify-center leaflet">
+    <div className="page-flip-wrapper">
+      <div className="leaflet">
         {/* @ts-expect-error: types not implemented correctly in package */}
         <HTMLFlipBook
           size="stretch"
+          width={297*1}
+          height={210*1}
+          minWidth={297*1}
+          minHeight={210*1}
+          maxWidth={297*1}
+          maxHeight={210*1}
           ref={flipbook}
-          width={width}
-          height={height}
           startPage={0}
-          flippingTime={1000}
-          minWidth={330}
-          maxWidth={600}
           showCover={true}
           onFlip={handleOnFlip}
+          renderOnlyPageLengthChange={true}
         >
           {manifest.pages.map((page, index) => (
             <div>
@@ -76,10 +60,10 @@ function App(props: AppProps) {
         </HTMLFlipBook>
       </div>
 
-      <div className="flex items-center gap-4 justify-center mt-4 pagination">
+      <div className="pagination">
         <button
           onClick={handlePrev}
-          className="w-8 h-8 border rounded flex items-center justify-center"
+          className="prev"
         >
           <ChevronLeft />
         </button>
@@ -89,7 +73,7 @@ function App(props: AppProps) {
         </div>
         <button
           onClick={handleNext}
-          className="w-8 h-8 border rounded flex items-center justify-center"
+          className="next"
         >
           <ChevronRight />
         </button>

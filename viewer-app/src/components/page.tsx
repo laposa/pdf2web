@@ -33,35 +33,33 @@ export const Page = (props: PageProps) => {
         : page.filename;
 
     return (
-        <div className="page" onClick={() => startAnimation()}>
-            <div className="relative">
-                <img className="" src={pageUrl} alt="Image 1" />
-                {page.areas &&
-                    page.areas.length > 0 &&
-                    page.areas.map((area, index) => (
-                        <div
-                            key={`area-${index}`}
-                            className="absolute group"
-                            style={{
-                                left: `${area.left}%`,
-                                top: `${area.top}%`,
-                                width: `${area.width}%`,
-                                height: `${area.height}%`,
-                            }}
-                        >
-                            <motion.a
-                                animate={controls}
-                                whileHover={{ opacity: 0.5 }}
-                                href={area.url}
-                                target="_blank"
-                                className=""
-                            ></motion.a>
-                            {area.tooltip ? (
-                                <div className="">{area.tooltip}</div>
-                            ) : null}
-                        </div>
-                    ))}
-            </div>
+        <div className="page-content">
+            <img className="page-image" src={pageUrl} alt="Image 1" />
+            {page.areas &&
+                page.areas.length > 0 &&
+                page.areas.map((area, index) => (
+                    <div
+                        key={`area-${index}`}
+                        className="group"
+                        style={{
+                            left: `${area.left}%`,
+                            top: `${area.top}%`,
+                            width: `${area.width}%`,
+                            height: `${area.height}%`,
+                        }}
+                    >
+                        <motion.a
+                            animate={controls}
+                            whileHover={{ opacity: 0.5 }}
+                            href={area.url}
+                            target="_blank"
+                            className="group-motion"
+                        ></motion.a>
+                        {area.tooltip ? (
+                            <div className="group-tooltip">{area.tooltip}</div>
+                        ) : null}
+                    </div>
+                ))}
         </div>
     );
 };

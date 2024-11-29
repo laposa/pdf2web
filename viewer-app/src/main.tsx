@@ -10,7 +10,7 @@ export type AppOptions = {
 }
 
 window.pdf2web = (options: AppOptions) => {
-  ReactDOM.createRoot(document.getElementById("root")!).render(
+  ReactDOM.createRoot(document.getElementById("pdf2web-viewer")!).render(
     <React.StrictMode>
       <App configuration={options} />
     </React.StrictMode>

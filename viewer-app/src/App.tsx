@@ -31,44 +31,51 @@ function App(props: AppProps) {
 
     return (
         <div className="page-flip-wrapper">
-            <div className="leaflet">
-                {/* @ts-expect-error: types not implemented correctly in package */}
-                <HTMLFlipBook
-                    size="stretch"
-                    width={297 * 1}
-                    height={210 * 1}
-                    minWidth={297 * 1}
-                    minHeight={210 * 1}
-                    maxWidth={297 * 1}
-                    maxHeight={210 * 1}
-                    ref={flipbook}
-                    startPage={0}
-                    showCover={true}
-                    onFlip={handleOnFlip}
-                    renderOnlyPageLengthChange={true}
-                >
-                    {manifest.pages.map((page, index) => (
-                        <div>
-                            <Page
-                                page={page}
-                                imagesBaseUrl={imagesBaseUrl}
-                                key={`page-${index}`}
-                                isActive={index === activeIndex}
-                            />
-                        </div>
-                    ))}
-                </HTMLFlipBook>
-            </div>
+            {/* @ts-expect-error: types not implemented correctly in package */}
+            <HTMLFlipBook
+                className="leaflet"
+                width={550}
+                height={733}
+                size="stretch"
+                minWidth={315}
+                maxWidth={1000}
+                minHeight={420}
+                maxHeight={1350}
+                maxShadowOpacity={0.5}
+                ref={flipbook}
+                showCover={true}
+                onFlip={handleOnFlip}
+                renderOnlyPageLengthChange={true}
+            >
+                {manifest.pages.map((page, index) => (
+                    <div className="page">
+                        <Page
+                            page={page}
+                            imagesBaseUrl={imagesBaseUrl}
+                            key={`page-${index}`}
+                            isActive={index === activeIndex}
+                        />
+                    </div>
+                ))}
+            </HTMLFlipBook>
 
             <div className="pagination">
-                <button onClick={handlePrev} className="prev">
+                <button
+                    onClick={handlePrev}
+                    className="pagination-btn prev"
+                    disabled={activeIndex === 0}
+                >
                     <ChevronLeft />
                 </button>
 
                 <div>
                     Page {activeIndex + 1} of {manifest.pages.length}
                 </div>
-                <button onClick={handleNext} className="next">
+                <button
+                    onClick={handleNext}
+                    className="pagination-btn next"
+                    disabled={activeIndex === manifest.pages.length - 2}
+                >
                     <ChevronRight />
                 </button>
             </div>

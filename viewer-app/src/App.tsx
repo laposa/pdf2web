@@ -1,101 +1,86 @@
-import React, { useEffect, useState } from "react";
-import { Page } from "./components/page";
-import { AppOptions } from "./main";
-import HTMLFlipBook from "react-pageflip";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useState } from 'react';
+import { Page } from './components/page';
+import { AppOptions } from './main';
+import HTMLFlipBook from 'react-pageflip';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 type AppProps = {
-  configuration: AppOptions;
-};
-
-const dimensions = {
-  width: 1190,
-  height: 1683,
+    configuration: AppOptions;
 };
 
 function App(props: AppProps) {
-  const { manifest, imagesBaseUrl } = props.configuration;
-  const flipbook = React.createRef<typeof HTMLFlipBook>();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [width, setWidth] = useState(dimensions.width);
-  const [height, setHeight] = useState(dimensions.height);
+    const { manifest, imagesBaseUrl } = props.configuration;
+    const flipbook = React.createRef<typeof HTMLFlipBook>();
+    const [activeIndex, setActiveIndex] = useState(0);
 
-  // Not working when size is set to "stretch"
-  // useEffect(() => {
-  //   if (typeof window !== undefined) {
-  //     const maxHeight = window.innerHeight - 300;
-  //     const ratio = dimensions.height / dimensions.width;
-  
-  //     setWidth(maxHeight / ratio);
-  //     setHeight(maxHeight);
-  //   }
-  // }, []);
+    const handleNext = () => {
+        // @ts-expect-error: types not implemented correctly in package
+        flipbook.current?.pageFlip().flipNext();
+    };
 
-  const handleNext = () => {
-    // @ts-expect-error: types not implemented correctly in package
-    flipbook.current?.pageFlip().flipNext();
-  };
+    const handlePrev = () => {
+        // @ts-expect-error: types not implemented correctly in package
+        flipbook.current?.pageFlip().flipPrev();
+    };
 
-  const handlePrev = () => {
-    // @ts-expect-error: types not implemented correctly in package
-    flipbook.current?.pageFlip().flipPrev();
-  };
+    const handleOnFlip = (e) => {
+        setActiveIndex(e.data);
+        const audio = new Audio('/sounds/flip-sound.mp3'); // Initialize the audio with the file
+        audio.play(); // Play the audio
+    };
 
-  const handleOnFlip = (e) => {
-    setActiveIndex(e.data);
-    const audio = new Audio("/sounds/flip-sound.mp3"); // Initialize the audio with the file
-    audio.play(); // Play the audio
-  };
+    return (
+        <div className="page-flip-wrapper">
+            {/* @ts-expect-error: types not implemented correctly in package */}
+            <HTMLFlipBook
+                className="leaflet"
+                width={550}
+                height={733}
+                size="stretch"
+                minWidth={315}
+                maxWidth={1000}
+                minHeight={420}
+                maxHeight={1350}
+                maxShadowOpacity={0.5}
+                ref={flipbook}
+                showCover={true}
+                onFlip={handleOnFlip}
+                renderOnlyPageLengthChange={true}
+            >
+                {manifest.pages.map((page, index) => (
+                    <div className="page">
+                        <Page
+                            page={page}
+                            imagesBaseUrl={imagesBaseUrl}
+                            key={`page-${index}`}
+                            isActive={index === activeIndex}
+                        />
+                    </div>
+                ))}
+            </HTMLFlipBook>
 
-  return (
-    <div className="fixed inset-0 flex flex-col justify-center items-center h-full font-sans px-4 page-flip-wrapper">
-      <div className="relative w-full flex justify-center leaflet">
-        {/* @ts-expect-error: types not implemented correctly in package */}
-        <HTMLFlipBook
-          size="stretch"
-          ref={flipbook}
-          width={width}
-          height={height}
-          startPage={0}
-          flippingTime={1000}
-          minWidth={330}
-          maxWidth={600}
-          showCover={true}
-          onFlip={handleOnFlip}
-        >
-          {manifest.pages.map((page, index) => (
-            <div>
-              <Page
-                page={page}
-                imagesBaseUrl={imagesBaseUrl}
-                key={`page-${index}`}
-                isActive={index === activeIndex}
-              />
+            <div className="pagination">
+                <button
+                    onClick={handlePrev}
+                    className="pagination-btn prev"
+                    disabled={activeIndex === 0}
+                >
+                    <ChevronLeft />
+                </button>
+
+                <div>
+                    Page {activeIndex + 1} of {manifest.pages.length}
+                </div>
+                <button
+                    onClick={handleNext}
+                    className="pagination-btn next"
+                    disabled={activeIndex === manifest.pages.length - 2}
+                >
+                    <ChevronRight />
+                </button>
             </div>
-          ))}
-        </HTMLFlipBook>
-      </div>
-
-      <div className="flex items-center gap-4 justify-center mt-4 pagination">
-        <button
-          onClick={handlePrev}
-          className="w-8 h-8 border rounded flex items-center justify-center"
-        >
-          <ChevronLeft />
-        </button>
-
-        <div>
-          Page {activeIndex + 1} of {manifest.pages.length}
         </div>
-        <button
-          onClick={handleNext}
-          className="w-8 h-8 border rounded flex items-center justify-center"
-        >
-          <ChevronRight />
-        </button>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default App;

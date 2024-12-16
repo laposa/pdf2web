@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF2Web</title>
+    <style>
+        html, body {
+            padding: 0; margin: 0;
+            background: #d0d0d0;
+            font-family: sans-serif;
+        }
+
+        .demo-container {
+            position: relative;
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        .pdf2web-page::before {
+            content: attr(data-page);
+            display: block;
+            position: absolute;
+            padding: 3px 10px;
+            margin: 5px;
+            background: white;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <div id="pdf2web-viewer"></div>
+    </div>
+    <script src="pdf2web-viewer.js"></script>
+    <script>
+        var baseUrl = '';
+        pdf2web({
+            target: document.getElementById('pdf2web-viewer'),
+            showTwoPages: true,
+            mobileBreakpoint: 480,
+            imagesBaseUrl: baseUrl + 'image/var/files/pdf2web/32043/',
+            manifest: {
+                "createdAt": "2024-11-21T19:21:29.878Z",
+                "pages": [
+                {
+                    "areas": [
+                    {
+                        "height": 23.61,
+                        "left": 35.07,
+                        "tooltip": "Walkers Chips",
+                        "top": 13.66,
+                        "url": baseUrl + "walkers",
+                        "width": 32.8
+                    },
+                    {
+                        "height": 18.8,
+                        "left": 67.72,
+                        "tooltip": "Pumkin ametesse mollit ea aliquip reprehenderit proident velit dolor commodo labore aliquip reprehenderit proident velit dolor commodo labore",
+                        "top": 72.3,
+                        "url": baseUrl + "pumkin",
+                        "width": 27.07
+                    }
+                    ],
+                    "filename": "954acf93-3dca-448e-8207-91261148d63a.png",
+                    "order": 1
+                },
+                {
+                    "areas": [],
+                    "filename": "fb9deec7-4f84-4f7a-b27e-8828dcf4d89b.png",
+                    "order": 2
+                },
+                {
+                    "areas": [
+                    {
+                        "height": 23.35,
+                        "left": 4.4,
+                        "top": 36.39,
+                        "url": baseUrl + "",
+                        "width": 91.45
+                    }
+                    ],
+                    "filename": "74b5c0f8-5add-4e96-bc86-861253b71f19.png",
+                    "order": 3
+                },
+                {
+                    "areas": [],
+                    "filename": "108a830e-a234-412f-adfc-04697d97c876.png",
+                    "order": 4
+                },
+                {
+                    "areas": [],
+                    "filename": "683da74d-80d1-4d6f-be6e-8fad27a30154.png",
+                    "order": 5
+                },
+                {
+                    "areas": [],
+                    "filename": "f7715590-4d31-4aec-8bd1-c5d564c8bb70.png",
+                    "order": 6
+                },
+                {
+                    "areas": [],
+                    "filename": "04e8bb4f-4db0-4d04-9a19-5cdf4a4a5925.png",
+                    "order": 7
+                },
+                {
+                    "areas": [],
+                    "filename": "393af403-3e88-47c9-83df-743f1f6a55be.png",
+                    "order": 8
+                },
+                {
+                    "areas": [],
+                    "filename": "ad71c274-0c6d-4000-a5c3-1d92ca5c17e3.png",
+                    "order": 9
+                },
+                {
+                    "areas": [],
+                    "filename": "200f8a67-b3bc-4f6d-83bd-792ae8ff81bc.png",
+                    "order": 10
+                }
+                ]
+            }
+        });
+    </script>
+</body>
+
+</html>

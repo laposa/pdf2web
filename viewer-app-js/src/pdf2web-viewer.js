@@ -51,7 +51,7 @@ function pdf2web(params) {
         pagesElement.className = 'pdf2web-pages';
         if (params.showTwoPages && !isMobile()) {
             pagesElement.className += ' pdf2web-pages-show-two pdf2web-cover-page-visible';
-            showingTwoPage = true;
+            showingTwoPages = true;
         }
         var spacer = document.createElement('img');
         spacer.className = 'pdf2web-spacer';

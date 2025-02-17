@@ -1,0 +1,10 @@
+# Draw.io backup
+.$*
+
+# Mac OS
+.DS_Store
+
+# env files
+.env*
+!.env.example
+!.env.*.tpl

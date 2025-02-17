@@ -25,6 +25,15 @@ function pdf2web(params) {
                 updateLayout();
             }, 200);
         });
+        updateAspectRatio();
+    }
+
+    function updateAspectRatio() {
+        var firstImage = params.target.querySelector('.pdf2web-page-1 > img');
+        var width = firstImage.naturalWidth;
+        var height = firstImage.naturalHeight;
+        if (params.showTwoPages && !isMobile()) width = width * 2;
+        pagesElement.style.aspectRatio = width + '/' + height;
     }
 
     function isMobile() {
@@ -44,6 +53,7 @@ function pdf2web(params) {
                 goToPage(currentPage);
             }
         }
+        updateAspectRatio();
     }
 
     function createAllPages() {
@@ -51,13 +61,9 @@ function pdf2web(params) {
         pagesElement.className = 'pdf2web-pages';
         if (params.showTwoPages && !isMobile()) {
             pagesElement.className += ' pdf2web-pages-show-two pdf2web-cover-page-visible';
+            if (pages.length == 2) pagesElement.className += ' pdf2web-two-page-book';
             showingTwoPages = true;
         }
-        var spacer = document.createElement('img');
-        spacer.className = 'pdf2web-spacer';
-        spacer.src = params.imagesBaseUrl + params.manifest.pages[0].filename;
-        spacer.setAttribute('aria-hidden', 'true');
-        pagesElement.appendChild(spacer);
         pages.forEach(function(page, index) {
             createSinglePage(pagesElement, page, index + 1);
         });
@@ -224,13 +230,14 @@ function pdf2web(params) {
 
     function createPagination() {
         var div = document.createElement('div');
+        div.className = 'pdf2web-pagination-container';
         div.innerHTML = `
             <ul class="pdf2web-pagination">
-                <li class="pdf2web-pagination-first"><a href="#">First</a></li>
-                <li class="pdf2web-pagination-prev"><a href="#">Previous</a></li>
+                <li class="pdf2web-pagination-first"><a href="#" aria-label="Go to first page">First</a></li>
+                <li class="pdf2web-pagination-prev"><a href="#" aria-label="Go to previous page">Previous</a></li>
                 <li class="pdf2web-pagination-nums"></li>
-                <li class="pdf2web-pagination-next"><a href="#">Next</a></li>
-                <li class="pdf2web-pagination-last"><a href="#">Last</a></li>
+                <li class="pdf2web-pagination-next"><a href="#" aria-label="Go to next page">Next</a></li>
+                <li class="pdf2web-pagination-last"><a href="#" aria-label="Go to last page">Last</a></li>
             </ul>
         `;
         params.target.appendChild(div);
@@ -370,6 +377,7 @@ function pdf2web(params) {
         var styles = `
             .pdf2web-wrapper {
                 opacity: 0;
+                height: 100%;
             }
 
             .pdf2web-wrapper.loaded {
@@ -379,15 +387,27 @@ function pdf2web(params) {
             .pdf2web-pages {
                 perspective: 4000px;
                 transition: transform 0.4s ease-in-out;
+                max-width: 100%;
+                max-height: calc(100% - 80px);
+                margin: 0 auto;
             }
 
             .pdf2web-pages.pdf2web-pages-show-two.pdf2web-cover-page-visible {
                 transform: translateX(-25%);
             }
 
+            .pdf2web-pages.pdf2web-pages-show-two.pdf2web-last {
+                transform: translateX(25%);
+            }
+
+            .pdf2web-pages.pdf2web-pages-show-two.pdf2web-two-page-book {
+                transition: transform 0.6s ease-in;
+            }
+
             .pdf2web-page {
                 position: absolute;
                 width: 100%;
+                height: 100%;
                 left: 0;
                 top: 0;
                 transition: transform 0.6s ease-in;
@@ -395,6 +415,7 @@ function pdf2web(params) {
                 backface-visibility: hidden;
                 transform-origin: 0 50%;
                 cursor: grab;
+                overflow: hidden;
             }
 
             .pdf2web-pages-show-two .pdf2web-page {
@@ -426,16 +447,6 @@ function pdf2web(params) {
             .pdf2web-pages-show-two .pdf2web-page.even.flipped {
                 transform: rotateY(0deg);
                 z-index: 0 !important;
-            }
-
-            .pdf2web-spacer {
-                width: 100%;
-                opacity: 0;
-                visibilty: hidden;
-            }
-
-            .pdf2web-pages-show-two .pdf2web-spacer {
-                width: 50%;
             }
 
             .pdf2web-page .pdf2web-area {
@@ -478,10 +489,13 @@ function pdf2web(params) {
             }
 
             .pdf2web-pagination {
+                height: 80px;
                 list-style: none;
-                display: block;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 text-align: center;
-                padding: 2em 0;
+                padding: 0;
                 margin: 0;
                 user-select: none;
             }

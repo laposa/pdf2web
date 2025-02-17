@@ -16,7 +16,9 @@
             position: relative;
             max-width: 1200px;
             width: 100%;
-            margin: 20px auto;
+            margin: 5vh auto;
+            height: 90vh;
+            outline: 1px dashed #909090;
         }
 
         .pdf2web-page::before {
@@ -28,7 +30,6 @@
             background: white;
             border-radius: 5px;
         }
-
     </style>
 </head>
 
@@ -38,92 +39,52 @@
     </div>
     <script src="pdf2web-viewer.js"></script>
     <script>
-        var baseUrl = '';
+        var baseUrl = 'https://supervalu.preprod.musgrave.io';
         pdf2web({
             target: document.getElementById('pdf2web-viewer'),
             showTwoPages: true,
             mobileBreakpoint: 480,
-            imagesBaseUrl: baseUrl + 'image/var/files/pdf2web/32043/',
             manifest: {
-                "createdAt": "2024-11-21T19:21:29.878Z",
+                "createdAt": "2025-02-14T16:28:52.236Z",
+                "id": "945b094d-1ba6-4333-ac33-ef4f4b75e115",
                 "pages": [
-                {
-                    "areas": [
                     {
-                        "height": 23.61,
-                        "left": 35.07,
-                        "tooltip": "Walkers Chips",
-                        "top": 13.66,
-                        "url": baseUrl + "walkers",
-                        "width": 32.8
+                        "areas": [
+                            {
+                                "height": 37.88,
+                                "left": 40.75,
+                                "top": 15.91,
+                                "url": "https://google.com",
+                                "width": 56.5
+                            }
+                        ],
+                        "filename": "57d102a4-edc7-4dc9-b33b-a1d49c2ab1ad.png",
+                        "id": "57d102a4-edc7-4dc9-b33b-a1d49c2ab1ad",
+                        "order": 1
                     },
                     {
-                        "height": 18.8,
-                        "left": 67.72,
-                        "tooltip": "Pumkin ametesse mollit ea aliquip reprehenderit proident velit dolor commodo labore aliquip reprehenderit proident velit dolor commodo labore",
-                        "top": 72.3,
-                        "url": baseUrl + "pumkin",
-                        "width": 27.07
-                    }
-                    ],
-                    "filename": "954acf93-3dca-448e-8207-91261148d63a.png",
-                    "order": 1
-                },
-                {
-                    "areas": [],
-                    "filename": "fb9deec7-4f84-4f7a-b27e-8828dcf4d89b.png",
-                    "order": 2
-                },
-                {
-                    "areas": [
+                        "areas": [],
+                        "filename": "e5099b09-f672-46dc-ad06-f030edcf0e1b.png",
+                        "id": "e5099b09-f672-46dc-ad06-f030edcf0e1b",
+                        "order": 2
+                    },
                     {
-                        "height": 23.35,
-                        "left": 4.4,
-                        "top": 36.39,
-                        "url": baseUrl + "",
-                        "width": 91.45
+                        "areas": [],
+                        "filename": "e5099b09-f672-46dc-ad06-f030edcf0e1b.png",
+                        "id": "e5099b09-f672-46dc-ad06-f030edcf0e1b",
+                        "order": 2
+                    },
+                    {
+                        "areas": [],
+                        "filename": "57d102a4-edc7-4dc9-b33b-a1d49c2ab1ad.png",
+                        "id": "e5099b09-f672-46dc-ad06-f030edcf0e1b",
+                        "order": 2
                     }
-                    ],
-                    "filename": "74b5c0f8-5add-4e96-bc86-861253b71f19.png",
-                    "order": 3
-                },
-                {
-                    "areas": [],
-                    "filename": "108a830e-a234-412f-adfc-04697d97c876.png",
-                    "order": 4
-                },
-                {
-                    "areas": [],
-                    "filename": "683da74d-80d1-4d6f-be6e-8fad27a30154.png",
-                    "order": 5
-                },
-                {
-                    "areas": [],
-                    "filename": "f7715590-4d31-4aec-8bd1-c5d564c8bb70.png",
-                    "order": 6
-                },
-                {
-                    "areas": [],
-                    "filename": "04e8bb4f-4db0-4d04-9a19-5cdf4a4a5925.png",
-                    "order": 7
-                },
-                {
-                    "areas": [],
-                    "filename": "393af403-3e88-47c9-83df-743f1f6a55be.png",
-                    "order": 8
-                },
-                {
-                    "areas": [],
-                    "filename": "ad71c274-0c6d-4000-a5c3-1d92ca5c17e3.png",
-                    "order": 9
-                },
-                {
-                    "areas": [],
-                    "filename": "200f8a67-b3bc-4f6d-83bd-792ae8ff81bc.png",
-                    "order": 10
-                }
-                ]
-            }
+                ],
+                "source": "503B-merged.pdf",
+                "updatedAt": "2025-02-14T16:28:52.236Z"
+            },
+            imagesBaseUrl: baseUrl + "/image/var/files/pdf2web/19636/"
         });
     </script>
 </body>

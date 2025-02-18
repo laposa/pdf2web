@@ -4,20 +4,20 @@ import { createCanvas } from 'canvas';
 import * as archiver from 'archiver';
 import { v4 as uuidv4 } from 'uuid';
 import { PdfManifest } from '@/shared';
+import { AppConfig, InjectConfig } from '@/app.config';
+import { ConvertDto } from './dtos/ConvertDto';
 
 @Injectable()
 export class ConvertService {
   pdfJs: typeof PDFjs;
-  
-  constructor() {
-    this.importPdfLib().then(pdfJs => {
+
+  constructor(@InjectConfig() private readonly config: AppConfig) {
+    this.importPdfLib().then((pdfJs) => {
       this.pdfJs = pdfJs;
     });
   }
 
-  async convert(
-    file: Express.Multer.File,
-  ): Promise<Buffer> {
+  async convert(data: ConvertDto, file: Express.Multer.File): Promise<Buffer> {
     const archive = archiver('zip', { zlib: { level: 9 } });
     const buffers = [];
     const manifest: PdfManifest = {
@@ -28,8 +28,10 @@ export class ConvertService {
       pages: [],
     };
 
-    archive.on('data', data => buffers.push(data));
-    archive.on('error', err => { throw err; });
+    archive.on('data', (data) => buffers.push(data));
+    archive.on('error', (err) => {
+      throw err;
+    });
 
     const loadingTask = this.pdfJs.getDocument(new Uint8Array(file.buffer));
     const pdfDocument = await loadingTask.promise;
@@ -46,24 +48,33 @@ export class ConvertService {
       });
 
       await renderTask.promise;
-      const image = canvas.toBuffer();
+      let quality = this.config.convertDefaultQuality;
+      if (data.quality) {
+        quality = +data.quality;
+      }
+
+      const image = canvas.toBuffer('image/jpeg', {
+        quality: quality,
+      });
 
       const id = uuidv4();
-      const filename = `${id}.png`;
+      const filename = `${id}.jpeg`;
       archive.append(image, { name: filename });
 
       manifest.pages.push({
         id,
         order: i,
         filename: filename,
-        areas: []
+        areas: [],
       });
 
       // Release page resources.
       page.cleanup();
     }
 
-    archive.append(JSON.stringify(manifest, null, 2), { name: 'manifest.json' });
+    archive.append(JSON.stringify(manifest, null, 2), {
+      name: 'manifest.json',
+    });
     archive.finalize();
 
     return new Promise<Buffer>((resolve, reject) => {

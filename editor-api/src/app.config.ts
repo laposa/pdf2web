@@ -6,6 +6,7 @@ const appConfig = registerAs('app', () => ({
   env: process.env.NODE_ENV!,
   port: +process.env.PORT! || 3000,
   clientApiKey: process.env.CLIENT_API_KEY!,
+  convertDefaultQuality: +process.env.CONVERT_DEFAULT_QUALITY! || 0.8,
   database: {
     host: process.env.DB_HOST!,
     port: +process.env.DB_PORT!,

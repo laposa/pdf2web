@@ -36,12 +36,12 @@ unzip ${OUTPUT_ZIP_PATH} -d ${OUTPUT_FOLDER}
 {
     "id": 1,
     "name": "Spring brochure test 3",
-    "title": "SuperValu spring offers",
+    "title": "Spring offers",
     "created": "2023-10-24 15:00:00.000Z",
     "modified": "2023-10-24 15:00:00.000Z",
     "pages": [
-        {"filename": "pages/1.webp", "areas": [{"coordinate_x": 125, "coordinate_y": 100, "width": 300, "height": 300, "tooltip": "Click here", "url": "https://shop.supervalu.ie"}]},
-        {"filename": "pages/2.webp", "areas": [{"x": 125, "y": 100, "width": 300, "height": 300, "tooltip": "Click here", "url": "https://shop.supervalu.ie"}]}
+        {"filename": "pages/1.webp", "areas": [{"coordinate_x": 125, "coordinate_y": 100, "width": 300, "height": 300, "tooltip": "Click here", "url": "https://laposa.ie"}]},
+        {"filename": "pages/2.webp", "areas": [{"x": 125, "y": 100, "width": 300, "height": 300, "tooltip": "Click here", "url": "https://laposa.ie"}]}
     ]
 
 }

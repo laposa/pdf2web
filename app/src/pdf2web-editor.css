@@ -1,4 +1,5 @@
 /**
  * styling needed for editor functionality
- * depends on pdf2web-viewer.css
  */
+
+ @import url(pdf2web-viewer.css);

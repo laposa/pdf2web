@@ -1,4 +1,4 @@
-function pdf2web(params) {
+function pdf2webViewer(params) {
   // init variables
   var currentPage = 1;
   var showingTwoPages;

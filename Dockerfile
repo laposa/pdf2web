@@ -3,13 +3,12 @@ FROM node:22-bookworm
 RUN apt-get -y update && \
     apt-get -y upgrade
 
-WORKDIR /usr/src/app
-ADD editor-api /usr/src/app/editor-api
-ADD shared /usr/src/app/shared
+WORKDIR /usr/src/
+ADD api /usr/src/api
 
-WORKDIR /usr/src/app/editor-api
+WORKDIR /usr/src/api
 RUN npm install \
-    && npm  run build
+    && npm run build
 
 USER node
-CMD node dist/editor-api/src/main
+CMD node dist/api/src/main

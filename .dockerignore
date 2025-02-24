@@ -1,7 +1,5 @@
-editor-api/node_modules
-editor-api/.env
-editor-api/dist
-shared/node_modules
-shared/dist
+api/node_modules
+api/.env
+api/dist
 .DS_Store
 .env

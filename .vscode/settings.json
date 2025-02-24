@@ -5,6 +5,7 @@
 	"eslint.validate": [
     "javascript",
     "typescript",
+    "css"
   ],
   "editor.formatOnSave": true,
   "[javascript]": {
@@ -12,5 +13,8 @@
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
 }

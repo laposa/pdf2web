@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>PDF2Web</title>
     <style>
       @import url(pdf2web-editor.css);
@@ -16,52 +16,41 @@
     <script src="pdf2web-viewer.js"></script>
     <script src="pdf2web-editor.js"></script>
     <script>
-      var baseUrl = "https://supervalu.preprod.musgrave.io";
       pdf2webEditor({
         target: document.getElementById("pdf2web-viewer"),
         showTwoPages: true,
         mobileBreakpoint: 480,
         manifest: {
-          createdAt: "2025-02-14T16:28:52.236Z",
-          id: "945b094d-1ba6-4333-ac33-ef4f4b75e115",
+          id: "2a320421-4b71-46ed-8cf5-3e4a41a7a6a1",
+          source: "503B-merged.pdf",
+          createdAt: "2025-02-21T10:47:54.514Z",
+          updatedAt: "2025-02-21T10:47:54.514Z",
           pages: [
             {
+              id: "62c9e890-402a-473c-b152-806cfd0d1e87",
+              order: 1,
+              filename: "62c9e890-402a-473c-b152-806cfd0d1e87.jpeg",
               areas: [
                 {
-                  height: 37.88,
-                  left: 40.75,
-                  top: 15.91,
+                  left: 39.98,
+                  top: 16.23,
+                  width: 57.27,
+                  height: 37.51,
+                  tooltip: "Google Search Engine",
                   url: "https://google.com",
-                  width: 56.5,
                 },
               ],
-              filename: "57d102a4-edc7-4dc9-b33b-a1d49c2ab1ad.png",
-              id: "57d102a4-edc7-4dc9-b33b-a1d49c2ab1ad",
-              order: 1,
             },
             {
-              areas: [],
-              filename: "e5099b09-f672-46dc-ad06-f030edcf0e1b.png",
-              id: "e5099b09-f672-46dc-ad06-f030edcf0e1b",
+              id: "0c1da749-72e3-4e9c-8eb8-8865ec4b52bd",
               order: 2,
-            },
-            {
+              filename: "0c1da749-72e3-4e9c-8eb8-8865ec4b52bd.jpeg",
               areas: [],
-              filename: "e5099b09-f672-46dc-ad06-f030edcf0e1b.png",
-              id: "e5099b09-f672-46dc-ad06-f030edcf0e1b",
-              order: 2,
-            },
-            {
-              areas: [],
-              filename: "57d102a4-edc7-4dc9-b33b-a1d49c2ab1ad.png",
-              id: "e5099b09-f672-46dc-ad06-f030edcf0e1b",
-              order: 2,
             },
           ],
-          source: "503B-merged.pdf",
-          updatedAt: "2025-02-14T16:28:52.236Z",
         },
-        imagesBaseUrl: baseUrl + "/image/var/files/pdf2web/19636/",
+        imagesBaseUrl:
+          "https://supervalu.preprod.musgrave.io/image/var/files/pdf2web/19636/",
       });
     </script>
   </body>

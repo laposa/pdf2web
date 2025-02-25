@@ -108,7 +108,7 @@ body {
 
 .pdf2web-page.flipped {
   transform: rotateY(-90deg);
-  point-events: none;
+  pointer-events: none;
 }
 
 .pdf2web-pages-show-two {

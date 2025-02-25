@@ -84,12 +84,12 @@ function pdf2webViewer(params) {
     if (pageNum == 1) {
       img.addEventListener("load", firstImageLoaded);
     }
-    creteAreas(div, page.areas);
+    createAreas(div, page.areas);
     div.appendChild(img);
     target.appendChild(div);
   }
 
-  function creteAreas(element, areas) {
+  function createAreas(element, areas) {
     if (!areas || !areas.length) return;
     areas.forEach(function (area) {
       var a = document.createElement("a");

@@ -37,6 +37,8 @@ body {
   max-width: 100%;
   max-height: calc(100% - 80px);
   margin: 0 auto;
+  position: absolute;
+  inset: 0;
 }
 
 .pdf2web-pages.pdf2web-pages-show-two.pdf2web-cover-page-visible {
@@ -134,28 +136,34 @@ body {
   }
 }
 
-.pdf2web-pagination {
-  height: 80px;
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  user-select: none;
+.pdf2web-pagination-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 
-  .pdf2web-disabled {
-    pointer-events: none;
-    opacity: 0.3;
-  }
+  .pdf2web-pagination {
+    height: 80px;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    user-select: none;
 
-  a {
-    color: white;
-  }
+    .pdf2web-disabled {
+      pointer-events: none;
+      opacity: 0.3;
+    }
 
-  > li {
-    display: inline-block;
-    margin: 0 0.5em;
+    a {
+      color: white;
+    }
+
+    > li {
+      display: inline-block;
+      margin: 0 0.5em;
+    }
   }
 }

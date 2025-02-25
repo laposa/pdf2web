@@ -6,6 +6,28 @@
     <title>PDF2Web</title>
     <style>
       @import url(pdf2web-viewer.css);
+
+      body {
+        padding: 0;
+        margin: 0;
+        background-color: #7e1d26;
+        color: white;
+        font-family: Helvetica, Arial, sans-serif;
+      }
+
+      .pdf2web-container {
+        position: relative;
+        width: 90%;
+        margin: 5vh auto;
+        height: 90vh;
+      }
+
+      @media screen and (max-width: 768px) {
+        .pdf2web-container {
+          max-width: 90vw;
+        }
+      }
+
     </style>
     <script src="pdf2web-viewer.js"></script>
   </head>
@@ -18,6 +40,7 @@
       pdf2webViewer({
         target: document.getElementById("pdf2web-viewer"),
         showTwoPages: true,
+        showEditor: true,
         mobileBreakpoint: 480,
         manifest: {
           id: "2a320421-4b71-46ed-8cf5-3e4a41a7a6a1",
@@ -29,13 +52,21 @@
               id: "62c9e890-402a-473c-b152-806cfd0d1e87",
               order: 1,
               filename: "62c9e890-402a-473c-b152-806cfd0d1e87.jpeg",
-              areas: [
+              hotspots: [
                 {
                   left: 39.98,
                   top: 16.23,
                   width: 57.27,
                   height: 37.51,
-                  tooltip: "Google Search Engine",
+                  title: "Google Search Engine Google Search Engine",
+                  url: "https://google.com",
+                },
+                {
+                  left: 10,
+                  top: 10,
+                  width: 10,
+                  height: 10,
+                  title: "Another Hotspot",
                   url: "https://google.com",
                 },
               ],
@@ -44,7 +75,33 @@
               id: "0c1da749-72e3-4e9c-8eb8-8865ec4b52bd",
               order: 2,
               filename: "0c1da749-72e3-4e9c-8eb8-8865ec4b52bd.jpeg",
-              areas: [],
+              hotspots: [],
+            },
+            {
+              id: "0c1da749-72e3-4e9c-8eb8-8865ec4b52bd",
+              order: 2,
+              filename: "62c9e890-402a-473c-b152-806cfd0d1e87.jpeg",
+              hotspots: [],
+            }, {
+              id: "0c1da749-72e3-4e9c-8eb8-8865ec4b52bd",
+              order: 2,
+              filename: "0c1da749-72e3-4e9c-8eb8-8865ec4b52bd.jpeg",
+              hotspots: [],
+            },
+            {
+              id: "0c1da749-72e3-4e9c-8eb8-8865ec4b52bd",
+              order: 2,
+              filename: "62c9e890-402a-473c-b152-806cfd0d1e87.jpeg",
+              hotspots: [
+                {
+                  left: 10,
+                  top: 10,
+                  width: 60,
+                  height: 10,
+                  title: "Another Hotspot",
+                  url: "https://google.com",
+                },
+              ],
             },
           ],
         },

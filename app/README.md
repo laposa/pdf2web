@@ -49,14 +49,14 @@ To initialise the viewer, you must provide the following paramters to the `pdf2w
 
 Use the following CSS style to show page number on each slide:
 
-````css
-    .pdf2web-page::before {
-        content: attr(data-page);
-        display: block;
-        position: absolute;
-        padding: 3px 10px;
-        margin: 5px;
-        background: white;
-        border-radius: 5px;
-    }
-````
+```css
+.pdf2web-page::before {
+  content: attr(data-page);
+  display: block;
+  position: absolute;
+  padding: 3px 10px;
+  margin: 5px;
+  background: white;
+  border-radius: 5px;
+}
+```

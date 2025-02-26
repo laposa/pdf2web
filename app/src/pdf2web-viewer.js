@@ -8,11 +8,11 @@ function pdf2webViewer(params) {
   // init variables
   var currentPage = 1;
   var showingTwoPages;
-  var numPages = params.manifest.pages.length;
   var currentHotspot;
   var pages = params.manifest.pages.sort((a, b) => {
     return a.order - b.order;
   });
+  var numPages = pages.length;
   var pagesElement;
 
   if (params.showEditor) {
@@ -104,26 +104,31 @@ function pdf2webViewer(params) {
   function createHotspots(element, pageIndex, hotspots) {
     if (!hotspots || !hotspots.length) return;
     hotspots.forEach(function (hotspot, index) {
-      var a = document.createElement("a");
-      a.className = "pdf2web-hotspot";
-      a.style.left = hotspot.left + "%";
-      a.style.top = hotspot.top + "%";
-      a.style.width = hotspot.width + "%";
-      a.style.height = hotspot.height + "%";
-      a.setAttribute("href", hotspot.url);
-      a.setAttribute("target", "_blank");
-      a.dataset.page = pageIndex;
-      a.dataset.hotspot = index;
-      a.addEventListener("click", function (e) {
-        if (params.showEditor) e.preventDefault();
-      });
-      if (params.showEditor) a.addEventListener("mousedown", handleHotspotMouseDown);
-      if (hotspot.title) {
-        a.setAttribute("data-tooltip", hotspot.title);
-        a.setAttribute("aria-label", hotspot.title);
-      }
-      element.appendChild(a);
+      insertHotspotElement(element, hotspot, pageIndex, index);
     });
+  }
+
+  function insertHotspotElement(element, hotspot, pageIndex, hotspotIndex) {
+    var a = document.createElement("a");
+    a.className = "pdf2web-hotspot";
+    a.style.left = hotspot.left + "%";
+    a.style.top = hotspot.top + "%";
+    a.style.width = hotspot.width + "%";
+    a.style.height = hotspot.height + "%";
+    a.setAttribute("href", hotspot.url);
+    a.setAttribute("target", "_blank");
+    a.dataset.page = pageIndex;
+    a.dataset.hotspot = hotspotIndex;
+    a.addEventListener("click", function (e) {
+      if (params.showEditor) e.preventDefault();
+    });
+    if (params.showEditor) a.addEventListener("mousedown", handleHotspotMouseDown);
+    if (hotspot.title) {
+      a.setAttribute("data-tooltip", hotspot.title);
+      a.setAttribute("aria-label", hotspot.title);
+    }
+    element.appendChild(a);
+    return a;
   }
 
   function attachSwipeHandlers() {
@@ -150,7 +155,10 @@ function pdf2webViewer(params) {
     }
 
     function touchStart(event) {
-      if (params.showEditor) return;
+      if (params.showEditor) {
+        handleHotspotCreation(event);
+        return;
+      }
       if (event.type === "touchstart") {
         if (event.touches.length > 1 || isZoomed()) return;
         startX = event.touches[0].clientX;
@@ -371,7 +379,7 @@ function pdf2webViewer(params) {
       params.target.querySelector(".pdf2web-pagination-first").classList.remove("pdf2web-disabled");
       params.target.querySelector(".pdf2web-pagination-prev").classList.remove("pdf2web-disabled");
     }
-    if (currentPage == params.manifest.pages.length) {
+    if (currentPage == pages.length) {
       params.target.querySelector(".pdf2web-pagination-last").classList.add("pdf2web-disabled");
       params.target.querySelector(".pdf2web-pagination-next").classList.add("pdf2web-disabled");
     } else {
@@ -382,6 +390,7 @@ function pdf2webViewer(params) {
 
   function attachKeyboardHandlers() {
     document.addEventListener("keydown", function (event) {
+      if (currentHotspot) return;
       switch (event.key) {
         case "ArrowLeft":
           event.preventDefault();
@@ -417,18 +426,18 @@ function pdf2webViewer(params) {
       <div class="pdf2web-editor-form-fields">
         <h2>Edit Hotspot</h2>
         <a href="#" class="pdf2web-editor-form-back-arrow">←</a>
-        <label>Title:<input type="text" class="pdf2web-input-title" /></label>
-        <label>Link:<textarea class="pdf2web-textarea-link"></textarea></label>
+        <label>Title:<input type="text" name="title" class="pdf2web-input-title" /></label>
+        <label>Link:<textarea name="url" class="pdf2web-textarea-link"></textarea></label>
         <label>Coordinates:</label>
         <div class="pdf2web-number-input-wrapper">
           <label>
             <span class="pdf2web-label">X</span>
-            <input type="text" class="pdf2web-input-x" maxlength="7"/>
+            <input type="text" name="left" class="pdf2web-input-x" maxlength="7"/>
             <span class="pdf2web-unit">%</span>
           </label>
           <label>
             <span class="pdf2web-label">Y</span>
-            <input type="text" class="pdf2web-input-y" maxlength="7"/>
+            <input type="text" name="top" class="pdf2web-input-y" maxlength="7"/>
             <span class="pdf2web-unit">%</span>
           </label>
         </div>
@@ -436,12 +445,12 @@ function pdf2webViewer(params) {
         <div class="pdf2web-number-input-wrapper">
           <label>
             <span class="pdf2web-label">Width</span>
-            <input type="text" class="pdf2web-input-width" maxlength="7"/>
+            <input type="text" name="width" class="pdf2web-input-width" maxlength="7"/>
             <span class="pdf2web-unit">%</span>
           </label>
           <label>
             <span class="pdf2web-label">Height</span>
-            <input type="text" class="pdf2web-input-height" maxlength="7"/>
+            <input type="text" name="height" class="pdf2web-input-height" maxlength="7"/>
             <span class="pdf2web-unit">%</span>
           </label>
         </div>
@@ -452,6 +461,7 @@ function pdf2webViewer(params) {
     var back = params.target.querySelector(".pdf2web-editor-form-back-arrow");
     back.addEventListener("click", cancelHotspotEdit);
     updateHotspotList();
+    attachEventsToFormElements();
   }
 
   function updateHotspotList() {
@@ -475,6 +485,38 @@ function pdf2webViewer(params) {
     });
     list.innerHTML = listHtml;
     attachEventsToEditorElements();
+  }
+
+  function attachEventsToFormElements() {
+    var inputs = params.target.querySelectorAll(
+      ".pdf2web-editor-form-fields input, .pdf2web-editor-form-fields textarea"
+    );
+    inputs.forEach(function (el) {
+      el.addEventListener("change", function () {
+        updateHotspotAttribute(currentHotspot, el.getAttribute("name"), el.value);
+      });
+    });
+  }
+
+  function updateHotspotAttribute(hotspotElement, attributeName, value) {
+    var pageIndex = hotspotElement.dataset.page * 1;
+    var hotspotIndex = hotspotElement.dataset.hotspot * 1;
+    pages[pageIndex].hotspots[hotspotIndex][attributeName] = value;
+    refreshHotspotElement(hotspotElement, pages[pageIndex].hotspots[hotspotIndex]);
+    updateHotspotList();
+  }
+
+  function refreshHotspotElement(hotspotElement, hotspot) {
+    var a = hotspotElement;
+    a.style.left = hotspot.left + "%";
+    a.style.top = hotspot.top + "%";
+    a.style.width = hotspot.width + "%";
+    a.style.height = hotspot.height + "%";
+    a.setAttribute("href", hotspot.url);
+    if (hotspot.title) {
+      a.setAttribute("data-tooltip", hotspot.title);
+      a.setAttribute("aria-label", hotspot.title);
+    }
   }
 
   function attachEventsToEditorElements() {
@@ -520,11 +562,10 @@ function pdf2webViewer(params) {
     editHotspot(pageIndex, hotspotIndex);
 
     var parent = currentHotspot.closest(".pdf2web-page");
-    var isDragging = false;
+    var isDragging = true;
     var offsetX, offsetY;
     var initialWidth, initialHeight;
     if (e.target !== currentHotspot) return;
-    isDragging = true;
 
     const parentRect = parent.getBoundingClientRect();
     offsetX = e.clientX - currentHotspot.getBoundingClientRect().left;
@@ -537,7 +578,6 @@ function pdf2webViewer(params) {
 
     function onHotspotMouseMove(e) {
       if (!isDragging) return;
-      const parentRect = parent.getBoundingClientRect();
       const newX = Math.max(
         0,
         Math.min(toPerc(e.clientX - parentRect.left - offsetX, parentRect.width), 100 - initialWidth)
@@ -569,6 +609,7 @@ function pdf2webViewer(params) {
     currentHotspot = hotspotElement;
     hotspotElements.forEach((el) => {
       el.classList.remove("edited");
+      el.classList.remove("new");
       el.innerHTML = "";
     });
     currentHotspot.classList.add("edited");
@@ -599,7 +640,6 @@ function pdf2webViewer(params) {
       if (!isResizing) return;
 
       var parentRect = parent.getBoundingClientRect();
-      var hotspotRect = currentHotspot.getBoundingClientRect();
       var newX = initialX;
       var newY = initialY;
       var newWidth = initialWidth;
@@ -679,9 +719,110 @@ function pdf2webViewer(params) {
     var hotspotElements = params.target.querySelectorAll(".pdf2web-hotspot");
     hotspotElements.forEach((el) => {
       el.classList.remove("edited");
+      el.classList.remove("new");
       el.innerHTML = "";
     });
     currentHotspot = null;
+  }
+
+  function addHotspotToPage(pageIndex, title, link, x, y, width, height) {
+    if (!pages[pageIndex].hotspots?.length) pages[pageIndex].hotspots = [];
+    var hotspotIndex = pages[pageIndex].hotspots.length;
+    var hotspot = {
+      left: x,
+      top: y,
+      width: width,
+      height: height,
+      title: title,
+      url: link,
+    };
+    pages[pageIndex].hotspots.push(hotspot);
+    var pageDiv = params.target.querySelector(".pdf2web-page-" + (pageIndex + 1));
+    currentHotspot = insertHotspotElement(pageDiv, hotspot, pageIndex, hotspotIndex);
+    currentHotspot.classList.add("new");
+    return hotspotIndex;
+  }
+
+  function handleHotspotCreation(e) {
+    if (e.target.tagName !== "IMG") return;
+    e.preventDefault();
+
+    var pageIndex = currentPage - 1;
+    var parent = params.target.querySelector(".pdf2web-page-" + currentPage);
+
+    var isDragging = true;
+    var hotspotIndex = -1;
+    var initX, initY, x, y, width, height;
+
+    const parentRect = parent.getBoundingClientRect();
+    initX = toPerc(e.clientX - parentRect.left, parentRect.width);
+    initY = toPerc(e.clientY - parentRect.top, parentRect.height);
+
+    document.addEventListener("mousemove", onHotspotCreateMouseMove);
+    document.addEventListener("mouseup", onHotspotCreateMouseUp);
+
+    function onHotspotCreateMouseMove(e) {
+      if (!isDragging) return;
+
+      var percX = inRange(toPerc(e.clientX - parentRect.left, parentRect.width), 0, 100);
+      var percY = inRange(toPerc(e.clientY - parentRect.top, parentRect.height), 0, 100);
+      if (initX < percX) {
+        x = initX;
+        width = inRange(percX - initX, 0, 100);
+      } else {
+        x = percX;
+        width = inRange(initX - percX, 0, 100);
+      }
+      if (initY < percY) {
+        y = initY;
+        height = inRange(percY - initY, 0, 100);
+      } else {
+        y = percY;
+        height = inRange(initY - percY, 0, 100);
+      }
+
+      if (hotspotIndex < 0)
+        hotspotIndex = addHotspotToPage(
+          pageIndex,
+          "New Hotspot",
+          "",
+          x.toFixed(2),
+          y.toFixed(2),
+          width.toFixed(2),
+          height.toFixed(2)
+        );
+      pages[pageIndex].hotspots[hotspotIndex].left = x.toFixed(2);
+      pages[pageIndex].hotspots[hotspotIndex].top = y.toFixed(2);
+      pages[pageIndex].hotspots[hotspotIndex].width = width.toFixed(2);
+      pages[pageIndex].hotspots[hotspotIndex].height = height.toFixed(2);
+      currentHotspot.style.left = `${x}%`;
+      currentHotspot.style.top = `${y}%`;
+      currentHotspot.style.width = `${width}%`;
+      currentHotspot.style.height = `${height}%`;
+    }
+
+    function setHotspotMinSize(hotspotELement, pageIndex, hotspotIndex) {
+      var width = inRange(pages[pageIndex].hotspots[hotspotIndex].width, 5, 100);
+      var height = inRange(pages[pageIndex].hotspots[hotspotIndex].height, 5, 100);
+      pages[pageIndex].hotspots[hotspotIndex].width = width;
+      pages[pageIndex].hotspots[hotspotIndex].height = height;
+      currentHotspot.style.width = `${width}%`;
+      currentHotspot.style.height = `${height}%`;
+    }
+
+    function onHotspotCreateMouseUp(e) {
+      isDragging = false;
+      document.removeEventListener("mousemove", onHotspotCreateMouseMove);
+      document.removeEventListener("mouseup", onHotspotCreateMouseUp);
+      if (hotspotIndex >= 0) {
+        currentHotspot = null;
+        updateHotspotList();
+        editHotspot(pageIndex, hotspotIndex);
+        setHotspotMinSize(currentHotspot, pageIndex, hotspotIndex);
+      } else {
+        cancelHotspotEdit(e);
+      }
+    }
   }
 
   function toPerc(value, total) {

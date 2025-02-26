@@ -66,20 +66,27 @@
 
   .pdf2web-hotspot::after {
     content: attr(data-tooltip);
+    box-sizing: border-box;
     display: inline-block;
-    padding: 0.2em 0.6em;
-    background: #303030;
+    padding: 0.2em 1em;
+    color: #000000;
+    background: #ffffff;
+    border: 1px solid #eeeeee;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-size: 10px;
     overflow: hidden;
-    max-width: 80%;
-    color: #fff;
+    max-width: 90%;
     position: absolute;
-    top: 100%;
+    bottom: 10px;
     left: 50%;
-    transform: translate(-50%, -1em);
+    transform: translate(-50%, 0);
     z-index: 1;
-    border-radius: 4px;
+    border-radius: 20px;
+  }
+
+  .pdf2web-hotspot.new::after {
+    display: none;
   }
 
   img {

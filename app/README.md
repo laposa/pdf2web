@@ -1,4 +1,4 @@
-# Simple Pdf2Web Viewerer App
+# Simple Pdf2Web Viewer App
 
 A simple flipbook viewer built in vanilla JavaScript without any dependencies offers an engaging way to showcase digital content, reminiscent of traditional paper flipbooks. The design utilizes the power of JavaScript to control the page flips, while CSS animations bring the experience to life with smooth transitions.
 

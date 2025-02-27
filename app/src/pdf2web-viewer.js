@@ -390,27 +390,35 @@ function pdf2webViewer(params) {
 
   function attachKeyboardHandlers() {
     document.addEventListener("keydown", function (event) {
-      if (currentHotspot) return;
-      switch (event.key) {
-        case "ArrowLeft":
-          event.preventDefault();
-          goToPage(getPreviousPage());
-          break;
+      if (currentHotspot) {
+        switch (event.key) {
+          case "Escape":
+            event.preventDefault();
+            cancelHotspotEdit(event);
+            break;
+        }
+      } else {
+        switch (event.key) {
+          case "ArrowLeft":
+            event.preventDefault();
+            goToPage(getPreviousPage());
+            break;
 
-        case "ArrowRight":
-          event.preventDefault();
-          goToPage(getNextPage());
-          break;
+          case "ArrowRight":
+            event.preventDefault();
+            goToPage(getNextPage());
+            break;
 
-        case "Home":
-          event.preventDefault();
-          animateToPage(1);
-          break;
+          case "Home":
+            event.preventDefault();
+            animateToPage(1);
+            break;
 
-        case "End":
-          event.preventDefault();
-          animateToPage(numPages);
-          break;
+          case "End":
+            event.preventDefault();
+            animateToPage(numPages);
+            break;
+        }
       }
     });
   }
@@ -455,6 +463,11 @@ function pdf2webViewer(params) {
           </label>
         </div>
       </div>
+      <div class="pdf2web-toolbar">
+        <button class="pdf2web-button pdf2web-button-add-hotspot">Add Hotspot</button>
+        <button class="pdf2web-button pdf2web-button-remove-hotspot">Remove Hotspot</button>
+        <button class="pdf2web-button pdf2web-button-save">Save</button>
+      </div>
     `;
     params.target.classList.add("pdf2web-editor-enabled");
     params.target.prepend(editorElement);
@@ -496,6 +509,40 @@ function pdf2webViewer(params) {
         updateHotspotAttribute(currentHotspot, el.getAttribute("name"), el.value);
       });
     });
+
+    var saveButton = params.target.querySelector(".pdf2web-button-save");
+    saveButton.addEventListener("click", saveEditorState);
+
+    var addHotspotButton = params.target.querySelector(".pdf2web-button-add-hotspot");
+    addHotspotButton.addEventListener("click", addNewHotspot);
+
+    var removeHotspotButton = params.target.querySelector(".pdf2web-button-remove-hotspot");
+    removeHotspotButton.addEventListener("click", removeCurrentHotspot);
+  }
+
+  function saveEditorState(e) {
+    // TODO: add validation
+    cancelHotspotEdit(e);
+    params.saveHandler(params.manifest);
+  }
+
+  function addNewHotspot(e) {
+    cancelHotspotEdit(e);
+    var pageIndex = currentPage - 1;
+    var hotspotIndex = addHotspotToPage(pageIndex, "New Hotspot", "https://", 30, 40, 40, 20);
+    currentHotspot = null;
+    editHotspot(pageIndex, hotspotIndex);
+    updateHotspotList();
+  }
+
+  function removeCurrentHotspot(e) {
+    var hotspotElement = currentHotspot;
+    cancelHotspotEdit(e);
+    var pageIndex = hotspotElement.dataset.page * 1;
+    var hotspotIndex = hotspotElement.dataset.hotspot * 1;
+    pages[pageIndex].hotspots.splice(hotspotIndex, 1);
+    hotspotElement.remove();
+    updateHotspotList();
   }
 
   function updateHotspotAttribute(hotspotElement, attributeName, value) {
@@ -785,7 +832,7 @@ function pdf2webViewer(params) {
         hotspotIndex = addHotspotToPage(
           pageIndex,
           "New Hotspot",
-          "",
+          "https://",
           x.toFixed(2),
           y.toFixed(2),
           width.toFixed(2),

@@ -426,7 +426,7 @@ function pdf2webViewer(params) {
   function initEditor() {
     editorElement = document.createElement("div");
     editorElement.className = "pdf2web-editor-form";
-    editorElement.innerHTML = `
+    editorElement.innerHTML = `<form>
       <div class="pdf2web-editor-form-list">
         <h2>All Hotspots</h2>
         <ul class="pdf2web-editor-page-list"></ul>
@@ -434,31 +434,29 @@ function pdf2webViewer(params) {
       <div class="pdf2web-editor-form-fields">
         <h2>Edit Hotspot</h2>
         <a href="#" class="pdf2web-editor-form-back-arrow">←</a>
-        <label>Title:<input type="text" name="title" class="pdf2web-input-title" /></label>
-        <label>Link:<textarea name="url" class="pdf2web-textarea-link"></textarea></label>
-        <label>Coordinates:</label>
+        <label><input type="text" name="title" class="pdf2web-input-title" required placeholder="Title" /></label>
+        <label><textarea name="url" class="pdf2web-textarea-link" required placeholder="Link"></textarea></label>
         <div class="pdf2web-number-input-wrapper">
           <label>
             <span class="pdf2web-label">X</span>
-            <input type="text" name="left" class="pdf2web-input-x" maxlength="7"/>
+            <input type="text" name="left" class="pdf2web-input-x" maxlength="7" required readonly />
             <span class="pdf2web-unit">%</span>
           </label>
           <label>
             <span class="pdf2web-label">Y</span>
-            <input type="text" name="top" class="pdf2web-input-y" maxlength="7"/>
+            <input type="text" name="top" class="pdf2web-input-y" maxlength="7" required readonly />
             <span class="pdf2web-unit">%</span>
           </label>
         </div>
-        <label>Size:</label>
         <div class="pdf2web-number-input-wrapper">
           <label>
             <span class="pdf2web-label">Width</span>
-            <input type="text" name="width" class="pdf2web-input-width" maxlength="7"/>
+            <input type="text" name="width" class="pdf2web-input-width" maxlength="7" required readonly />
             <span class="pdf2web-unit">%</span>
           </label>
           <label>
             <span class="pdf2web-label">Height</span>
-            <input type="text" name="height" class="pdf2web-input-height" maxlength="7"/>
+            <input type="text" name="height" class="pdf2web-input-height" maxlength="7" required readonly />
             <span class="pdf2web-unit">%</span>
           </label>
         </div>
@@ -467,7 +465,7 @@ function pdf2webViewer(params) {
         <button class="pdf2web-button pdf2web-button-add-hotspot">Add Hotspot</button>
         <button class="pdf2web-button pdf2web-button-remove-hotspot">Remove Hotspot</button>
         <button class="pdf2web-button pdf2web-button-save">Save</button>
-      </div>
+      </div></form>
     `;
     params.target.classList.add("pdf2web-editor-enabled");
     params.target.prepend(editorElement);
@@ -510,8 +508,8 @@ function pdf2webViewer(params) {
       });
     });
 
-    var saveButton = params.target.querySelector(".pdf2web-button-save");
-    saveButton.addEventListener("click", saveEditorState);
+    var saveForm = params.target.querySelector("form");
+    saveForm.addEventListener("submit", saveEditorState);
 
     var addHotspotButton = params.target.querySelector(".pdf2web-button-add-hotspot");
     addHotspotButton.addEventListener("click", addNewHotspot);

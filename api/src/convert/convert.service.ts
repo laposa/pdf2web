@@ -3,7 +3,7 @@ import * as PDFjs from 'pdfjs-dist';
 import { createCanvas } from 'canvas';
 import * as archiver from 'archiver';
 import { v4 as uuidv4 } from 'uuid';
-import { PdfManifest } from '@/shared';
+import { PdfManifest } from './convert.types';
 import { AppConfig, InjectConfig } from '@/app.config';
 import { ConvertDto } from './dtos/ConvertDto';
 

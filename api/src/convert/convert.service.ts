@@ -65,7 +65,7 @@ export class ConvertService {
         id,
         order: i,
         filename: filename,
-        areas: [],
+        hotspots: [],
       });
 
       // Release page resources.

@@ -10,14 +10,14 @@ export type PdfPage = {
   id: string;
   order: number;
   filename: string;
-  areas: any[];
+  hotspots: PdfPageHotspot[];
 };
 
-export type PdfPageArea = {
+export type PdfPageHotspot = {
   left: number;
   top: number;
   width: number;
   height: number;
-  tooltip: string;
+  title: string;
   url: string;
 };

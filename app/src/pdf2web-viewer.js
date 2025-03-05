@@ -124,7 +124,7 @@ function pdf2webViewer(params) {
     });
     if (params.showEditor) a.addEventListener("mousedown", handleHotspotMouseDown);
     if (hotspot.title) {
-      a.setAttribute("data-tooltip", hotspot.title);
+      a.setAttribute("data-title", hotspot.title);
       a.setAttribute("aria-label", hotspot.title);
     }
     element.appendChild(a);
@@ -559,7 +559,7 @@ function pdf2webViewer(params) {
     a.style.height = hotspot.height + "%";
     a.setAttribute("href", hotspot.url);
     if (hotspot.title) {
-      a.setAttribute("data-tooltip", hotspot.title);
+      a.setAttribute("data-title", hotspot.title);
       a.setAttribute("aria-label", hotspot.title);
     }
   }

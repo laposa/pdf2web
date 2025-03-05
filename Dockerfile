@@ -11,4 +11,4 @@ RUN npm install \
     && npm run build
 
 USER node
-CMD node dist/api/src/main
+CMD node dist/main

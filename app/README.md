@@ -1,14 +1,6 @@
 # Simple Pdf2Web Viewer App
 
-A simple flipbook viewer built in vanilla JavaScript without any dependencies offers an engaging way to showcase digital content, reminiscent of traditional paper flipbooks. The design utilizes the power of JavaScript to control the page flips, while CSS animations bring the experience to life with smooth transitions.
-
-The decision to use vanilla JavaScript and CSS animations means that the flipbook viewer is easily maintainable and adaptable. Developers can modify or extend the functionality without worrying about compatibility issues that often arise with third-party libraries.
-
-# Simple Pdf2Web Viewer App
-
-A simple flipbook viewer build in vanilla JavaScript and free from any external dependencies, provides an interactive method to present digital content, evoking the charm of classic paper flipbooks. The implementation leverages JavaScript for managing page turns, while CSS animations enhance the experience with fluid transitions.
-
-By opting for vanilla JavaScript and CSS animations, this flipbook viewer remains highly maintainable and flexible. Developers can easily adjust or expand its features without the concerns of compatibility issues that often accompany third-party libraries.
+A simple flipbook viewer built in vanilla JavaScript without any dependencies offers an engaging way to showcase digital content, reminiscent of traditional paper flipbooks. By opting for vanilla JavaScript and CSS animations, this flipbook viewer remains highly maintainable and flexible. Developers can easily adjust or expand its features without the concerns of compatibility issues that often accompany third-party libraries.
 
 ## Initialisation
 
@@ -35,11 +27,11 @@ To initialize the viewer, you must provide the following parameters to the `pdf2
           manifest: {
             "pages": [
               {
-                "areas": [
+                "hotspots": [
                     {
                         "height": 23.61,
                         "left": 35.07,
-                        "tooltip": "Walkers Chips",
+                        "title": "Walkers Chips",
                         "top": 13.66,
                         "url": "/walkers",
                         "width": 32.8

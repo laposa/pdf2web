@@ -162,12 +162,12 @@ function pdf2webViewer(params) {
       if (event.type === "touchstart") {
         if (event.touches.length > 1 || isZoomed()) return;
         startX = event.touches[0].clientX;
+        if (!event.target.classList.contains("pdf2web-hotspot")) event.preventDefault();
       } else if (event.type === "mousedown") {
         if (isZoomed()) return;
         startX = event.clientX;
+        event.preventDefault();
       }
-
-      event.preventDefault();
 
       isSwiping = true;
       var itemIndex = currentPage - 1;

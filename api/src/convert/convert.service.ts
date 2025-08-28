@@ -38,7 +38,16 @@ export class ConvertService {
 
     for (let i = 1; i <= pdfDocument.numPages; i++) {
       const page = await pdfDocument.getPage(i);
-      const viewport = page.getViewport({ scale: 2.0 });
+      let viewport = page.getViewport({ scale: 1 });
+
+      if (
+        this.config.maxHeight > 0 &&
+        viewport.height > this.config.maxHeight
+      ) {
+        const scale = this.config.maxHeight / viewport.height;
+        viewport = page.getViewport({ scale });
+      }
+
       const canvas = createCanvas(viewport.width, viewport.height);
       const context = canvas.getContext('2d');
 

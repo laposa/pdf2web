@@ -7,7 +7,7 @@ WORKDIR /usr/src/
 ADD api /usr/src/api
 
 WORKDIR /usr/src/api
-RUN npm install \
+RUN npm ci \
     && npm run build
 
 USER node

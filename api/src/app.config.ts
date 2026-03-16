@@ -8,6 +8,7 @@ const appConfig = registerAs('app', () => ({
   clientApiKey: process.env.CLIENT_API_KEY!,
   convertDefaultQuality: +process.env.CONVERT_DEFAULT_QUALITY! || 0.8,
   maxHeight: +process.env.MAX_CONVERTED_IMAGE_HEIGHT! || 0,
+  defaultWidth: +process.env.DEFAULT_WIDTH! || 1200,
 }));
 
 export const InjectConfig = () => Inject(appConfig.KEY);

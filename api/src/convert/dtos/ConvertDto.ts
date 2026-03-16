@@ -4,4 +4,5 @@ export class ConvertDto {
   @IsOptional()
   @IsNumberString()
   quality?: string;
+  width?: number;
 }

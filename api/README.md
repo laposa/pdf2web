@@ -23,8 +23,14 @@ OUTPUT_FOLDER="./output"
 # Define the quality parameter (0.01-1) (optional)
 QUALITY=0.8
 
+# Set the width in pixels for each page (the height will be adjusted automatically to maintain the aspect ratio)
+WIDTH=1200
+
 # Send the PDF file to the conversion endpoint and save the ZIP file
-curl -X POST -F "file=@${PDF_FILE_PATH}" -F "quality=${QUALITY}" http://localhost:3000/convert -o ${OUTPUT_ZIP_PATH}
+curl -X POST http://localhost:3000/convert -o ${OUTPUT_ZIP_PATH} \
+  -F "file=@${PDF_FILE_PATH}" \
+  -F "quality=${QUALITY}" \
+  -F "width=${WIDTH}"
 
 # Unzip the ZIP file into the output folder
 unzip ${OUTPUT_ZIP_PATH} -d ${OUTPUT_FOLDER}

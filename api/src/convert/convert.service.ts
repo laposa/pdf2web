@@ -21,24 +21,6 @@ export class ConvertService {
     this.applyWorkarounds();
   }
 
-  applyWorkarounds() {
-    // pdfjs-dist 5.x expects browser globals. We must polyfill these before any pdf.js imports:
-    // Without these, embedded images in PDFs will fail to render with cryptic errors like "Image or Canvas expected".
-    const g = globalThis as any;
-    if (!g.Image) g.Image = Image;
-    if (!g.DOMMatrix) g.DOMMatrix = DOMMatrix;
-    if (!g.ImageData) g.ImageData = ImageData;
-    if (!g.Path2D) g.Path2D = Path2D;
-
-    // Point to the worker script (enables multi-threaded parsing)
-    const workerPath = path.join(__dirname, '../../node_modules/pdfjs-dist/legacy/build/pdf.worker.min.mjs');
-    GlobalWorkerOptions.workerSrc = pathToFileURL(workerPath).href;
-
-    // Standard fonts for proper text rendering
-    const standardFontPath = path.join(__dirname, '../../node_modules/pdfjs-dist/standard_fonts/');
-    (GlobalWorkerOptions as any).standardFontDataUrl = `${pathToFileURL(standardFontPath).href}`;
-  }
-
   async convert(data: ConvertDto, file: Express.Multer.File): Promise<Buffer> {
 
     const archive = archiver('zip', { zlib: { level: 9 } });
@@ -62,38 +44,18 @@ export class ConvertService {
     for (let i = 1; i <= pdfDocument.numPages; i++) {
       const page = await pdfDocument.getPage(i);
 
-      let desiredWidth = this.config.defaultWidth;
-      if (data.width > 0) desiredWidth = data.width;
-      let tempViewport = page.getViewport({ scale: 1, });
-      const scale = desiredWidth / tempViewport.width;
-      let viewport = page.getViewport({ scale });
-
-      if (
-        this.config.maxHeight > 0 &&
-        viewport.height > this.config.maxHeight
-      ) {
-        const adjustedScale = this.config.maxHeight / viewport.height;
-        viewport = page.getViewport({ scale: adjustedScale });
-      }
-
+      const viewport = this.createViewport(page, data);
       const canvas = createCanvas(viewport.width, viewport.height);
       const context = canvas.getContext('2d');
 
-      await page.render({
-        canvasContext: context as any,
-        viewport,
-        canvas: null
-      }).promise;
-
       let quality = this.config.convertDefaultQuality;
-      if (data.quality) {
-        quality = +data.quality;
-      }
+      if (data.quality) quality = +data.quality;
 
-      const image = canvas.toBuffer("image/jpeg", quality * 100);
+      const format = this.getOutputFormat(data);
+      const image = await this.renderImage(page, context, canvas, viewport, format.mime, quality);
 
       const id = uuidv4();
-      const filename = `${id}.jpeg`;
+      const filename = `${id}.${format.extension}`;
       archive.append(image, { name: filename });
 
       manifest.pages.push({
@@ -123,4 +85,78 @@ export class ConvertService {
     const pdfjsLib = await dynamicImport('pdfjs-dist/legacy/build/pdf.mjs');
     return pdfjsLib as typeof PDFjs;
   }
+
+  applyWorkarounds() {
+    // pdfjs-dist 5.x expects browser globals. We must polyfill these before any pdf.js imports:
+    // Without these, embedded images in PDFs will fail to render with cryptic errors like "Image or Canvas expected".
+    const g = globalThis as any;
+    if (!g.Image) g.Image = Image;
+    if (!g.DOMMatrix) g.DOMMatrix = DOMMatrix;
+    if (!g.ImageData) g.ImageData = ImageData;
+    if (!g.Path2D) g.Path2D = Path2D;
+
+    // Point to the worker script (enables multi-threaded parsing)
+    const workerPath = path.join(__dirname, '../../node_modules/pdfjs-dist/legacy/build/pdf.worker.min.mjs');
+    GlobalWorkerOptions.workerSrc = pathToFileURL(workerPath).href;
+
+    // Standard fonts for proper text rendering
+    const standardFontPath = path.join(__dirname, '../../node_modules/pdfjs-dist/standard_fonts/');
+    (GlobalWorkerOptions as any).standardFontDataUrl = `${pathToFileURL(standardFontPath).href}`;
+  }
+
+  createViewport(page, data) {
+      let desiredWidth = this.config.defaultWidth;
+      if (data.width > 0) desiredWidth = data.width;
+      let tempViewport = page.getViewport({ scale: 1, });
+      const scale = desiredWidth / tempViewport.width;
+      let viewport = page.getViewport({ scale });
+
+      if (
+        this.config.maxHeight > 0 &&
+        viewport.height > this.config.maxHeight
+      ) {
+        const adjustedScale = this.config.maxHeight / viewport.height;
+        viewport = page.getViewport({ scale: adjustedScale });
+      }
+
+      return viewport;
+  }
+
+  async renderImage(page, context, canvas, viewport, mime, quality) {
+    await page.render({
+      canvasContext: context as any,
+      viewport,
+      canvas: null
+    }).promise;
+
+    return canvas.toBuffer(mime, quality * 100);
+
+  }
+
+  getOutputFormat(data) {
+    let format = this.config.convertDefaultFormat;
+    if (data.format) format = data.format;
+    let mime, extension;
+
+    switch (format.toLowerCase()) {
+      case 'png':
+        mime = "image/png";
+        extension = "png";
+        break;
+      case 'webp':
+        mime = "image/webp";
+        extension = "webp";
+        break;
+      case 'jpeg':
+      default:
+        mime = "image/jpeg";
+        extension = "jpeg";
+    }
+
+    return {
+      mime,
+      extension
+    }
+  }
+
 }

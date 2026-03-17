@@ -20,6 +20,9 @@ OUTPUT_ZIP_PATH="./output.zip"
 # Define the output folder for unzipping
 OUTPUT_FOLDER="./output"
 
+# Define output format (jpeg/png/webp)
+FORMAT=jpeg
+
 # Define the quality parameter (0.01-1) (optional)
 QUALITY=0.8
 
@@ -30,7 +33,8 @@ WIDTH=1200
 curl -X POST http://localhost:3000/convert -o ${OUTPUT_ZIP_PATH} \
   -F "file=@${PDF_FILE_PATH}" \
   -F "quality=${QUALITY}" \
-  -F "width=${WIDTH}"
+  -F "width=${WIDTH}" \
+  -F "format=${FORMAT}"
 
 # Unzip the ZIP file into the output folder
 unzip ${OUTPUT_ZIP_PATH} -d ${OUTPUT_FOLDER}

@@ -5,4 +5,5 @@ export class ConvertDto {
   @IsNumberString()
   quality?: string;
   width?: number;
+  format?: string;
 }

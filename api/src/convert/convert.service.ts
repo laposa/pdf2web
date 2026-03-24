@@ -38,7 +38,8 @@ export class ConvertService {
       throw err;
     });
 
-    const loadingTask = this.pdfJs.getDocument(new Uint8Array(file.buffer));
+    const wasmUrl = path.join(__dirname, '../../node_modules/pdfjs-dist/wasm/');
+    const loadingTask = this.pdfJs.getDocument({ data: new Uint8Array(file.buffer), wasmUrl });
     const pdfDocument = await loadingTask.promise;
 
     for (let i = 1; i <= pdfDocument.numPages; i++) {

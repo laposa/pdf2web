@@ -56,7 +56,7 @@ export class ConvertService {
       const image = await this.renderImage(page, context, canvas, viewport, format.mime, quality);
 
       const id = uuidv4();
-      const filename = `${id}.${format.extension}`;
+      const filename = `${i.toString().padStart(3, '0')}.${format.extension}`;
       archive.append(image, { name: filename });
 
       manifest.pages.push({

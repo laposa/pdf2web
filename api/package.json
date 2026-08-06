@@ -28,7 +28,7 @@
     "archiver": "^7.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "express": "^4.22.2",
+    "express": "^5.2.1",
     "helmet": "^8.0.0",
     "pdfjs-dist": "5.5.207",
     "reflect-metadata": "^0.2.2",
